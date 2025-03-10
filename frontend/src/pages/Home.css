@@ -1,0 +1,508 @@
+.home {
+    font-family: Arial, sans-serif;
+    color: #333;
+    position: relative;
+    background-color: black; 
+  }
+
+  .search-bar {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 850px;
+    z-index: 100;
+  }
+  
+  /* =============== HERO SECTION =============== */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+    padding: 0 80px;
+    max-width: 2000px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #000000;
+  }
+  
+  .hero__background {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    right: 80px;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .hero__background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  
+  .hero__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    max-width: 500px;
+    z-index: 1;
+  }
+  
+  .hero__content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero__button {
+    position: relative;
+    background: #fff;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .hero__button span {
+    background-image: linear-gradient(rgba(103, 18, 150, 1), rgba(158, 31, 131, 1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .hero__button:hover {
+    background-color: #ddd;
+  }
+  
+  /* =============== INSPIRATION SECTION =============== */
+  .inspiration {
+    padding: 2rem 80px;
+    max-width: 2000px;
+    margin: 0 auto;
+    background-color: white; 
+  }
+  
+  .inspiration h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #222222;
+  }
+  
+  .inspiration__cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  
+  .inspiration__card {
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #fff;
+    transition: transform 0.2s;
+  }
+  
+  .inspiration__card:hover {
+    transform: scale(1.02);
+  }
+  
+  .inspiration__card-img {
+    height: 260px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .inspiration__card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .inspiration__card-text.pink {
+    background-color: rgba(204, 45, 74, 1);
+  }
+  .inspiration__card-text.magenta {
+    background-color: rgba(188, 26, 110, 1);
+  }
+  .inspiration__card-text.orange {
+    background-color: rgba(222, 49, 81, 1);
+  }
+  .inspiration__card-text.red {
+    background-color: rgba(217, 59, 48, 1);
+  }
+  
+  .inspiration__card-text {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .inspiration__card-text h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  .inspiration__card-text p {
+    margin: 0;
+    font-size: 14px;
+    color: #ffffff;
+  }
+  
+  /* =============== EXPERIENCES SECTION =============== */
+  .experiences {
+    padding: 3rem 80px;
+    max-width: 2000px;
+    margin: 0 auto;
+    background-color: white; 
+  }
+  
+  .experiences h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #222222;
+  }
+  
+  .experiences__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  
+  .experiences__card {
+    position: relative;
+    height: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 48px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .experiences__card-left {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("https://a0.muscache.com/im/pictures/b2f98185-f3bf-40db-ba8d-da0bceeccc65.jpg") center/cover no-repeat;
+  }
+  
+  .experiences__card-right {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("https://a0.muscache.com/im/pictures/cae7ae9a-d069-4c6a-9267-795643472df1.jpg") center/cover no-repeat;
+  }
+  
+  .experiences__card h3 {
+    font-size: 48px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    max-width: 300px;
+    line-height: 1.1;
+  }
+  
+  .experiences__card button {
+    background: #fff;
+    color: #222222;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+    transition: transform 0.2s;
+  }
+  
+  .experiences__card button:hover {
+    transform: scale(1.02);
+  }
+
+  /* =============== HOSTING SECTION =============== */
+  .hosting {
+    padding: 0 80px;
+    max-width: 2000px;
+    margin: 3rem auto;
+    background-color: white; 
+
+  }
+
+  .hosting__content {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../assets/Host.png") center/cover no-repeat;
+    border-radius: 12px;
+    width: 100%;
+    aspect-ratio: 1.8/1;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  /* =============== FUTURE GETAWAYS SECTION =============== */
+  .future-getaways {
+    padding: 48px 80px;
+    margin: 0 auto;
+    background-color: white; 
+
+  }
+
+  .future-getaways > * {
+    max-width: 1280px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .future-getaways h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #222222;
+  }
+
+  /* Navigation Section */
+  .future-getaways__nav {
+    border-bottom: 1px solid #DDDDDD;
+    margin-bottom: 32px;
+  }
+
+  .future-getaways__tabs {
+    display: flex;
+    gap: 32px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 16px;
+  }
+
+  .future-getaways__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .future-getaways__tabs button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    color: #717171;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .future-getaways__tabs button.active {
+    color: #222222;
+  }
+
+  .future-getaways__tabs button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -17px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #222222;
+  }
+
+  /* Destinations Grid Section */
+  .future-getaways__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 100px;
+    margin-top: 24px;
+    width: 100%;
+  }
+
+  .future-getaways__column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .future-getaways__destination {
+    cursor: pointer;
+  }
+
+  .future-getaways__destination h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #222222;
+    line-height: 18px;
+  }
+
+  .future-getaways__destination p {
+    font-size: 14px;
+    color: #717171;
+    margin: 4px 0 0 0;
+    line-height: 18px;
+  }
+
+  .future-getaways__show-more {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222222;
+    cursor: pointer;
+    text-decoration: underline;
+    display: block;
+    text-align: left;
+    margin-top: 24px;
+  }
+
+  .hosting__content h2 {
+    color: #fff;
+    font-size: 72px;
+    font-weight: 600;
+    margin: 0;
+    max-width: 400px;
+    line-height: 1;
+  }
+
+  .hosting__content button {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .hosting__content button:hover {
+    transform: scale(1.02);
+  }
+  
+  .experiences__card h3 {
+    position: relative;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .experiences__card button {
+    position: relative;
+    margin-top: 0.5rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+  
+  /* =============== GIFT CARDS SECTION =============== */
+  .giftcards {
+    padding: 3rem 80px;
+    max-width: 2000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    background-color: white;
+  }
+
+  .giftcards__text {
+    flex: 1;
+  }
+
+  .giftcards__text h2 {
+    font-size: 48px;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 24px;
+    max-width: 400px;
+  }
+
+  .giftcards__text button {
+    background: #222222;
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .giftcards__text button:hover {
+    background-color: #333;
+  }
+
+  .giftcards__images {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .giftcards__images img {
+    width: 650px;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* =============== HOSTING SECTION =============== */
+  .hosting {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 3rem 5%;
+    gap: 2rem;
+    background-color: #fff;
+  }
+  
+  .hosting__image {
+    flex: 1;
+    text-align: center;
+    
+  }
+  
+  .hosting__image img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .hosting__text {
+    flex: 1;
+  }
+  
+  .hosting__text h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hosting__text button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+  
+  .hosting__text button:hover {
+    background-color: #333;
+  }
+  
+
+
+  

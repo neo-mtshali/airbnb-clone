@@ -1,0 +1,153 @@
+.rules-section {
+  padding: 48px 0;
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.rules-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.rules-column h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #222222;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rule-item svg {
+  width: 24px;
+  height: 24px;
+  color: #222222;
+  flex-shrink: 0;
+}
+
+.rule-content {
+  flex: 1;
+}
+
+.rule-content h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #222222;
+}
+
+.rule-content p {
+  font-size: 14px;
+  color: #717171;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.show-all-rules {
+  background: none;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  padding: 13px 23px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 32px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.show-all-rules:hover {
+  background-color: #F7F7F7;
+  transform: scale(1.01);
+}
+
+.rules-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 1000;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.rules-modal-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #DDDDDD;
+  display: flex;
+  align-items: center;
+}
+
+.rules-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 16px;
+}
+
+.rules-modal-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cancellation-policy {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #DDDDDD;
+}
+
+.cancellation-policy h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.cancellation-policy p {
+  font-size: 14px;
+  color: #717171;
+  line-height: 1.4;
+}
+
+@media (max-width: 744px) {
+  .rules-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .rules-column {
+    border-bottom: 1px solid #DDDDDD;
+    padding-bottom: 32px;
+  }
+
+  .rules-column:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .show-all-rules {
+    width: 100%;
+  }
+}
+
+@media (min-width: 745px) and (max-width: 950px) {
+  .rules-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

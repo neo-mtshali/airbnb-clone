@@ -1,0 +1,94 @@
+.amenities-section {
+  padding: 32px 0;
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.amenities-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+  color: #222222;
+}
+
+.amenity-item svg {
+  width: 24px;
+  height: 24px;
+  color: #222222;
+}
+
+.show-all-amenities {
+  background: none;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  padding: 13px 23px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.show-all-amenities:hover {
+  background-color: #F7F7F7;
+  transform: scale(1.01);
+}
+
+.amenities-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 1000;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.amenities-modal-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.amenities-modal-close {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.amenities-modal .amenities-grid {
+  grid-template-columns: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 744px) {
+  .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .show-all-amenities {
+    width: 100%;
+  }
+}

@@ -1,0 +1,177 @@
+.date-picker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+}
+
+.date-picker-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.date-picker-content {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 16px 32px;
+  border-radius: 32px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  width: max-content;
+}
+
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.calendar-navigation button {
+  border: 1px solid #DDDDDD;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  cursor: pointer;
+  color: #222222;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.calendar-navigation button:hover {
+  border-color: #222222;
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #484848;
+}
+
+.date-picker-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.date-picker-tab {
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.date-picker-tab.active {
+  background-color: #F7F7F7;
+}
+
+.calendars-container {
+  display: flex;
+  gap: 48px;
+}
+
+.calendar {
+  min-width: 300px;
+}
+
+.calendar h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222222;
+  text-align: center;
+  flex: 1;
+}
+
+.calendar-grid {
+  width: 100%;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.weekdays div {
+  text-align: center;
+  font-size: 12px;
+  color: #717171;
+  padding: 4px;
+  font-weight: 600;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #222222;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+  margin: 2px;
+}
+
+.day:hover:not(.empty) {
+  background-color: #f7f7f7;
+}
+
+.day.empty {
+  cursor: default;
+}
+
+.day.selected {
+  background-color: #FF385C;
+  color: white;
+  font-weight: 600;
+}
+
+.day.in-range {
+  background-color: #FFF1F1;
+  border-radius: 0;
+}
+
+.day.in-range:first-child {
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.day.in-range:last-child {
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}

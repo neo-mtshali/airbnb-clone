@@ -1,0 +1,144 @@
+.listing-header {
+  width: 100%;
+  height: 80px;
+  border-bottom: 1px solid #DDDDDD;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1280px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  flex: 0 0 auto;
+}
+
+.airbnb-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+  color: #FF385C;
+}
+
+.search-bar {
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  min-width: 300px;
+  border: 1px solid #DDDDDD;
+  border-radius: 24px;
+  background-color: white;
+  padding: 0 8px 0 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.search-button:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.search-button span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222222;
+}
+
+.search-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #FF385C;
+  border-radius: 50%;
+  margin-left: 12px;
+}
+
+.search-icon {
+  color: white;
+  font-size: 12px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.become-host-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222222;
+  padding: 12px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+.become-host-button:hover {
+  background-color: #F7F7F7;
+}
+
+.language-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.language-button:hover {
+  background-color: #F7F7F7;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 5px 5px 12px;
+  border: 1px solid #DDDDDD;
+  border-radius: 21px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.user-icon {
+  font-size: 30px;
+  color: #717171;
+}
+
+@media (max-width: 744px) {
+  .become-host-button {
+    display: none;
+  }
+  
+  .search-button {
+    min-width: auto;
+  }
+}

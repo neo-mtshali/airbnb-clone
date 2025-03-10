@@ -1,0 +1,129 @@
+.calendar {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.calendar-header button {
+  background: none;
+  border: 1px solid #DDDDDD;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.calendar-header button:hover {
+  background-color: #F7F7F7;
+}
+
+.calendar-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px;
+  color: #717171;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  border: none;
+  background: none;
+  font-size: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.calendar-day:hover:not(.different-month):not(.unavailable) {
+  background-color: #F7F7F7;
+}
+
+.calendar-day.different-month {
+  color: #DDDDDD;
+  cursor: default;
+}
+
+.calendar-day.selected {
+  background-color: #222222;
+  color: white;
+  border-radius: 50%;
+}
+
+.calendar-day.in-range {
+  background-color: #F7F7F7;
+}
+
+.calendar-day.unavailable {
+  text-decoration: line-through;
+  color: #DDDDDD;
+  cursor: not-allowed;
+}
+
+.calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #DDDDDD;
+}
+
+.clear-dates {
+  background: none;
+  border: none;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #222222;
+}
+
+.close-calendar {
+  background: #222222;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.close-calendar:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 744px) {
+  .calendar {
+    padding: 16px;
+  }
+
+  .calendar-day {
+    font-size: 12px;
+  }
+}

@@ -26,49 +26,44 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
-.rule-item svg {
+.rule-icon {
   width: 24px;
   height: 24px;
   color: #222222;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .rule-content {
   flex: 1;
 }
 
-.rule-content h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-  color: #222222;
-}
-
 .rule-content p {
   font-size: 14px;
-  color: #717171;
+  color: #222222;
   margin: 0;
   line-height: 1.4;
+  font-weight: 400;
 }
 
-.show-all-rules {
+.show-more-btn {
   background: none;
-  border: 1px solid #222222;
-  border-radius: 8px;
-  padding: 13px 23px;
-  font-size: 16px;
+  border: none;
+  padding: 0;
+  font-size: 14px;
   font-weight: 600;
+  color: #222222;
   cursor: pointer;
-  margin-top: 32px;
-  transition: transform 0.2s, background-color 0.2s;
+  text-decoration: none;
+  margin-top: 8px;
+  display: inline-block;
 }
 
-.show-all-rules:hover {
-  background-color: #F7F7F7;
-  transform: scale(1.01);
+.show-more-btn:hover {
+  text-decoration: underline;
 }
 
 .rules-modal {

@@ -156,7 +156,7 @@ const Search = () => {
                 <button className="favorite-btn"><FaHeart /></button>
               </div>
               <div className="listing-info">
-                <div className="listing-header">
+                <div className="listing-title">
                   <h3>{`Entire home in ${listing.location}`}</h3>
                   <h2>{listing.title}</h2>
                 </div>

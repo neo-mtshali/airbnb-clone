@@ -23,7 +23,8 @@ const users = [
     name: 'Jane Smith',
     email: 'jane@example.com',
     password: '$2a$10$XFNxG5fMvRjQrJPZgMJALOUfJaRnqnKTjy2nZAtN.PBLuVMmYTTdC', // hashed 'password123'
-    isHost: true
+    isHost: true,
+    isSuperhost: true
   }
 ];
 

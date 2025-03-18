@@ -4,7 +4,7 @@ const Accommodation = require('../models/Accommodation');
 exports.getAllAccommodations = async (req, res) => {
   try {
     const accommodations = await Accommodation.find()
-      .populate('host', 'name email')
+      .populate('host', 'name email isSuperhost')
       .sort({ createdAt: -1 });
     res.status(200).json(accommodations);
   } catch (error) {
@@ -16,7 +16,7 @@ exports.getAllAccommodations = async (req, res) => {
 exports.getAccommodationById = async (req, res) => {
   try {
     const accommodation = await Accommodation.findById(req.params.id)
-      .populate('host', 'name email');
+      .populate('host', 'name email isSuperhost');
     
     if (!accommodation) {
       return res.status(404).json({ message: 'Accommodation not found' });

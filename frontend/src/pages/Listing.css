@@ -41,6 +41,10 @@
   margin: 0 4px;
 }
 
+.reviews-count {
+  text-decoration: underline;
+}
+
 .listing-actions {
   display: flex;
   gap: 16px;
@@ -104,6 +108,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 80px;
+  margin-top: 48px;
 }
 
 .host-info-section {
@@ -149,6 +154,72 @@
   background-color: #DDDDDD;
   margin: 32px 0;
   width: 100%;
+}
+
+/* Additional styles merged from components/listing/Listing.css */
+.listing-main {
+  padding-right: 24px;
+}
+
+.listing-sidebar {
+  position: relative;
+  margin-top: 95px;
+  height: 200px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.listing-description {
+  margin-bottom: 48px;
+}
+
+.listing-description h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.listing-description p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #222222;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 18px;
+  color: #717171;
+}
+
+/* Responsive Design */
+@media (max-width: 1128px) {
+  .listing-container {
+    padding: 24px 40px;
+  }
+}
+
+@media (max-width: 950px) {
+  .listing-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .listing-main {
+    padding-right: 0;
+  }
+
+  .listing-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 744px) {
+  .listing-container {
+    padding: 24px 24px;
+  }
 }
 
 /* Listing details header styles are defined above */

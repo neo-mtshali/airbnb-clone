@@ -8,6 +8,7 @@ import inspocard3 from "../assets/Rectangle 1-2.jpg";
 import inspocard4 from "../assets/Rectangle 1-3.jpg";
 import giftCardImage from "../assets/Gift Cards.jpg";
 import hostingImage from "../assets/Host.png";  // Import the hosting section image
+import Host from "../components/listing/Host"; // Import the Host component
 
 // Future Getaways destination data
 const destinations = {
@@ -126,9 +127,14 @@ function Home() {
 
       {/* HOSTING SECTION */}
       <section className="hosting">
-        <div className="hosting__content">
-          <h2>Questions about hosting?</h2>
-          <button>Ask a Superhost</button>
+        <div className="hosting__container">
+          <Host 
+            hostImage={hostingImage}
+            hostName="Ghazal"
+            joinDate="May 2021"
+            reviews={12}
+            isSuperhost={true}
+          />
         </div>
       </section>
 

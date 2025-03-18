@@ -8,6 +8,8 @@ import Amenities from '../components/listing/Amenities';
 import Calendar from '../components/listing/Calendar';
 import Reviews from '../components/listing/Reviews';
 import Rules from '../components/listing/Rules';
+import Host from '../components/listing/Host';
+import ExploreOptions from '../components/listing/ExploreOptions';
 import { accommodationApi } from '../services/api';
 import './Listing.css';
 
@@ -31,7 +33,8 @@ const Listing = () => {
           host: response.data.host || {
             name: 'Host',
             image: 'https://via.placeholder.com/64',
-            joinDate: 'January 2023'
+            joinDate: 'January 2023',
+            isSuperhost: false
           },
           images: response.data.images && response.data.images.length > 0 
             ? response.data.images 
@@ -60,7 +63,8 @@ const Listing = () => {
           host: {
             name: 'Megan',
             image: 'https://randomuser.me/api/portraits/women/42.jpg',
-            joinDate: 'January 2020'
+            joinDate: 'January 2020',
+            isSuperhost: false
           },
           images: [
             'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXBhcnRtZW50fGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60',
@@ -151,6 +155,13 @@ const Listing = () => {
               <h2>Entire rental unit hosted by {listing.host.name}</h2>
               <img src={listing.host.image} alt={listing.host.name} className="host-image" />
             </div>
+
+          </div>
+
+          <div className="divider"></div>
+
+          <div className="listing-description">
+            <h2>Entire rental unit hosted by {listing.host.name}</h2>
             <div className="property-specs">
               <span><FaUsers /> {listing.maxGuests} guests</span>
               <span><FaBed /> {listing.bedrooms} bedroom</span>
@@ -160,10 +171,9 @@ const Listing = () => {
 
           <div className="divider"></div>
 
-          <div className="listing-description">
-            <h2>About this space</h2>
-            <p>{listing.description}</p>
-          </div>
+          <div className="divider"></div>
+
+          <p>{listing.description}</p>
 
           <div className="divider"></div>
 
@@ -185,6 +195,16 @@ const Listing = () => {
             totalReviews={typeof listing.reviews === 'number' ? listing.reviews : 0}
           />
 
+          
+
+          <Host 
+            hostImage={listing.host.image}
+            hostName={listing.host.name}
+            joinDate={listing.host.joinDate}
+            reviews={listing.reviews || 0}
+            isSuperhost={listing.host.isSuperhost}
+          />
+
           <div className="divider"></div>
 
           <Rules 
@@ -203,7 +223,10 @@ const Listing = () => {
           />
         </div>
       </div>
+      
+
     </div>
+    <ExploreOptions country="France" />
     </>
   );
 };

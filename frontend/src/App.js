@@ -10,10 +10,11 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 const AppContent = () => {
   const location = useLocation();
   const isSearchPage = location.pathname === '/search';
+  const isListingPage = location.pathname.includes('/listing/');
 
   return (
     <div>
-      {!isSearchPage && <Header />}
+      {!isSearchPage && !isListingPage && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />

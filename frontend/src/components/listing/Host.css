@@ -1,0 +1,132 @@
+.host-profile {
+  padding: 24px 0;
+  border-bottom: 1px solid #dddddd;
+  font-family: 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+}
+
+.host-profile__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.host-profile__image {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+.host-profile__info h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #222222;
+}
+
+.host-profile__info p {
+  font-size: 14px;
+  color: #717171;
+  margin: 0;
+}
+
+.host-profile__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.host-profile__stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #222222;
+}
+
+.host-profile__icon {
+  font-size: 16px;
+  color: #222222;
+}
+
+.host-profile__badge {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #222222;
+}
+
+.host-profile__badge span {
+  font-weight: 600;
+}
+
+.host-profile__superhost-info {
+  margin-bottom: 16px;
+}
+
+.host-profile__superhost-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #222222;
+}
+
+.host-profile__superhost-info p {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #717171;
+  margin: 0;
+  max-width: 450px;
+}
+
+.host-profile__response {
+  margin-bottom: 24px;
+}
+
+.host-profile__response-item {
+  font-size: 14px;
+  color: #222222;
+  margin-bottom: 8px;
+}
+
+.host-profile__contact {
+  margin-bottom: 24px;
+}
+
+.host-profile__contact-btn {
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.host-profile__contact-btn:hover {
+  background-color: #f7f7f7;
+}
+
+.host-profile__payment-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+}
+
+.host-profile__payment-icon {
+  font-size: 20px;
+}
+
+.host-profile__payment-info p {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #717171;
+  margin: 0;
+}

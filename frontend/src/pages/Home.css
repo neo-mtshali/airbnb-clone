@@ -239,16 +239,20 @@
 
   }
 
-  .hosting__content {
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../assets/Host.png") center/cover no-repeat;
+  .hosting {
+    padding: 3rem 80px;
+    max-width: 2000px;
+    margin: 0 auto;
+    background-color: white;
+  }
+  
+  .hosting__container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
     border-radius: 12px;
-    width: 100%;
-    aspect-ratio: 1.8/1;
-    padding: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 24px;
   }
 
   /* =============== FUTURE GETAWAYS SECTION =============== */

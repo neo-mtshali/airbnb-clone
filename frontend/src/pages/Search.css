@@ -106,6 +106,8 @@
 .listing-card {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 30px;
+  border-radius: 12px;
 }
 
 .listing-card:hover {
@@ -171,13 +173,13 @@
   justify-content: space-between;
 }
 
-.listing-header h3 {
+.listing-title h3 {
   font-size: 15px;
   color: #222;
   margin: 0;
 }
 
-.listing-header h2 {
+.listing-title h2 {
   font-size: 18px;
   margin: 4px 0;
   color: #222;

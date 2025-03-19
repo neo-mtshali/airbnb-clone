@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
-import { FaStar, FaChevronDown } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
 import Calendar from './Calendar';
 import './ReservationForm.css';
 
-const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
-  const [dates, setDates] = useState({ checkIn: null, checkOut: null });
+const ReservationForm = ({ price = 125, rating = 4.92, reviews = 372, maxGuests = 4, dates = {}, setDates = () => {} }) => {
+  // Use the dates passed from the parent component
   const [guests, setGuests] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
+
+  const formatDate = (date) => {
+    if (!date) return '';
+    const options = { month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+  
+  // Format date for display in the title (Feb 19, 2022 - Feb 26, 2022)
+  const formatDateWithYear = (date) => {
+    if (!date) return '';
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
 
   const calculateTotal = () => {
     if (!dates.checkIn || !dates.checkOut) return null;
@@ -28,6 +40,10 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
     };
   };
 
+  const handleCloseCalendar = () => {
+    setShowCalendar(false);
+  };
+
   const total = calculateTotal();
 
   return (
@@ -38,11 +54,22 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
           <span className="per-night">night</span>
         </div>
         <div className="rating">
-          <FaStar />
+          <i className="fas fa-star"></i>
           <span>{rating}</span>
           <span className="dot">·</span>
           <span className="reviews">{reviews} reviews</span>
         </div>
+      </div>
+
+      <div className="form-title">
+        {dates.checkIn && dates.checkOut && (
+          <h3>
+            {Math.ceil((dates.checkOut - dates.checkIn) / (1000 * 60 * 60 * 24))} nights in New York
+          </h3>
+        )}
+        {dates.checkIn && dates.checkOut && (
+          <p className="date-range">{formatDateWithYear(dates.checkIn)} - {formatDateWithYear(dates.checkOut)}</p>
+        )}
       </div>
 
       <div className="booking-inputs">
@@ -52,7 +79,7 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
             <input 
               type="text" 
               readOnly 
-              value={dates.checkIn ? dates.checkIn.toLocaleDateString() : ''} 
+              value={dates.checkIn ? formatDate(dates.checkIn) : 'Add date'} 
               placeholder="Add date"
             />
           </div>
@@ -61,7 +88,7 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
             <input 
               type="text" 
               readOnly 
-              value={dates.checkOut ? dates.checkOut.toLocaleDateString() : ''} 
+              value={dates.checkOut ? formatDate(dates.checkOut) : 'Add date'} 
               placeholder="Add date"
             />
           </div>
@@ -69,16 +96,19 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
 
         <div className="guests-input">
           <label>GUESTS</label>
-          <select 
-            value={guests} 
-            onChange={(e) => setGuests(Number(e.target.value))}
-          >
-            {[...Array(maxGuests)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1} guest{i !== 0 ? 's' : ''}
-              </option>
-            ))}
-          </select>
+          <div className="select-wrapper">
+            <select 
+              value={guests} 
+              onChange={(e) => setGuests(Number(e.target.value))}
+            >
+              {[...Array(maxGuests)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1} guest{i !== 0 ? 's' : ''}
+                </option>
+              ))}
+            </select>
+            <i className="fas fa-chevron-down select-icon"></i>
+          </div>
         </div>
       </div>
 
@@ -111,11 +141,15 @@ const ReservationForm = ({ price, rating, reviews, maxGuests }) => {
 
       {showCalendar && (
         <div className="calendar-modal">
-          <Calendar 
-            dates={dates}
-            setDates={setDates}
-            onClose={() => setShowCalendar(false)}
-          />
+          <div className="calendar-overlay" onClick={handleCloseCalendar}></div>
+          <div className="calendar-container">
+            <button className="close-calendar" onClick={handleCloseCalendar}>×</button>
+            <Calendar 
+              dates={dates}
+              setDates={setDates}
+              onClose={handleCloseCalendar}
+            />
+          </div>
         </div>
       )}
     </div>

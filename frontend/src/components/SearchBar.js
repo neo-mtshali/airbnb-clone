@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SearchBar.css';
-import { FaSearch } from 'react-icons/fa';
 import DatePicker from './DatePicker';
 import GuestPicker from './GuestPicker';
 
@@ -107,7 +106,7 @@ function SearchBar() {
             navigate(`/search?${searchParams.toString()}`);
           }}
         >
-          <FaSearch />
+          <i className="fas fa-search"></i>
         </button>
       </div>
 

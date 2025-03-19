@@ -9,6 +9,8 @@ import inspocard4 from "../assets/Rectangle 1-3.jpg";
 import giftCardImage from "../assets/Gift Cards.jpg";
 import hostingImage from "../assets/Host.png";  // Import the hosting section image
 import Host from "../components/listing/Host"; // Import the Host component
+import experienceTripImage from "../assets/images/experience-trip.jpg"; // Import trip experiences image
+import experienceHomeImage from "../assets/images/experience-home.jpg"; // Import home experiences image
 
 // Future Getaways destination data
 const destinations = {
@@ -37,20 +39,22 @@ const destinations = {
 function Home() {
   return (
     <main className="home">
-      <SearchBar />
-      {/* HERO SECTION */}
-      <section className="hero">
-        <div className="hero__background">
-          <img
-            src={heroImage}
-            alt="Modern House"
-          />
-        </div>
-        <div className="hero__content">
-          <h1>Not sure where to go? Perfect.</h1>
-          <button className="hero__button"><span>I'm flexible</span></button>
-        </div>
-      </section>
+      {/* HERO SECTION WITH SEARCHBAR */}
+      <div className="hero-container">
+        <SearchBar />
+        <section className="hero">
+          <div className="hero__background">
+            <img
+              src={heroImage}
+              alt="Modern House"
+            />
+          </div>
+          <div className="hero__content">
+            <h1>Not sure where to go? Perfect.</h1>
+            <button className="hero__button"><span>I'm flexible</span></button>
+          </div>
+        </section>
+      </div>
 
       {/* INSPIRATION SECTION */}
       <section className="inspiration">
@@ -99,11 +103,21 @@ function Home() {
       <section className="experiences">
         <h2>Discover Airbnb Experiences</h2>
         <div className="experiences__cards">
-          <div className="experiences__card experiences__card-left">
+          <div 
+            className="experiences__card experiences__card-left"
+            style={{ 
+              background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${experienceTripImage}) center/cover no-repeat` 
+            }}
+          >
             <h3>Things to do on your trip</h3>
             <button>Experiences</button>
           </div>
-          <div className="experiences__card experiences__card-right">
+          <div 
+            className="experiences__card experiences__card-right"
+            style={{ 
+              background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${experienceHomeImage}) center/cover no-repeat` 
+            }}
+          >
             <h3>Things to do from home</h3>
             <button>Online Experiences</button>
           </div>
@@ -126,15 +140,15 @@ function Home() {
 
 
       {/* HOSTING SECTION */}
-      <section className="hosting">
-        <div className="hosting__container">
-          <Host 
-            hostImage={hostingImage}
-            hostName="Ghazal"
-            joinDate="May 2021"
-            reviews={12}
-            isSuperhost={true}
-          />
+      <section 
+        className="hosting"
+        style={{ 
+          background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${hostingImage}) center/cover no-repeat` 
+        }}
+      >
+        <div className="hosting__content">
+          <h2>Questions about hosting?</h2>
+          <button className="hosting__button">Ask a Superhost</button>
         </div>
       </section>
 

@@ -2,7 +2,7 @@
     font-family: Arial, sans-serif;
     color: #333;
     position: relative;
-    background-color: black; 
+    background-color: #fff; 
   }
 
   .search-bar {
@@ -13,19 +13,25 @@
     width: 100%;
     max-width: 850px;
     z-index: 100;
+    /* Increased z-index to ensure it's above all sections */
   }
   
   /* =============== HERO SECTION =============== */
+  .hero-container {
+    position: relative;
+    width: 100%;
+    background-color: #000000;
+  }
+
   .hero {
     position: relative;
     width: 100%;
     height: 85vh;
     overflow: hidden;
-    padding: 0 80px;
+    padding: 10px 80px;
     max-width: 2000px;
     margin: 0 auto;
     box-sizing: border-box;
-    background-color: #000000;
   }
   
   .hero__background {
@@ -61,10 +67,12 @@
   .hero__content h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
+    color: #fff;
   }
   
   .hero__button {
     position: relative;
+    border-radius: 25px;
     background: #fff;
     padding: 0.8rem 1.5rem;
     border: none;
@@ -90,7 +98,7 @@
     padding: 2rem 80px;
     max-width: 2000px;
     margin: 0 auto;
-    background-color: white; 
+    background-color: #fff; 
   }
   
   .inspiration h2 {
@@ -186,7 +194,7 @@
   
   .experiences__card {
     position: relative;
-    height: 480px;
+    height: 580px;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -211,11 +219,12 @@
     margin: 0 0 24px 0;
     max-width: 300px;
     line-height: 1.1;
+    color: #ffffff;
   }
   
   .experiences__card button {
     background: #fff;
-    color: #222222;
+    color: #201f1f;
     border: none;
     padding: 14px 24px;
     border-radius: 8px;
@@ -232,27 +241,23 @@
 
   /* =============== HOSTING SECTION =============== */
   .hosting {
-    padding: 0 80px;
-    max-width: 2000px;
-    margin: 3rem auto;
-    background-color: white; 
-
-  }
-
-  .hosting {
-    padding: 3rem 80px;
-    max-width: 2000px;
-    margin: 0 auto;
-    background-color: white;
-  }
-  
-  .hosting__container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;
+    width: 100%;
+    margin: 4rem auto;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-color: #fff;
+    height: 680px;
+    width: 1400px;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    padding: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-left: 80px;
+    position: relative;
+    overflow: hidden;
+    max-width: 1200px;
+    gap: 2rem;
   }
 
   /* =============== FUTURE GETAWAYS SECTION =============== */
@@ -368,35 +373,38 @@
     margin-top: 24px;
   }
 
+  .hosting__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    z-index: 2;
+  }
+
   .hosting__content h2 {
     color: #fff;
-    font-size: 72px;
+    font-size: 56px;
     font-weight: 600;
     margin: 0;
     max-width: 400px;
-    line-height: 1;
+    line-height: 1.1;
   }
 
-  .hosting__content button {
+  .hosting__button {
     background: #fff;
-    color: #000;
+    color: #222;
     border: none;
-    padding: 14px 24px;
+    padding: 13px 23px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s;
+    width: fit-content;
   }
 
-  .hosting__content button:hover {
+  .hosting__button:hover {
     transform: scale(1.02);
-  }
-  
-  .experiences__card h3 {
-    position: relative;
-    margin: 0;
-    font-size: 1.5rem;
+    background-color: #f7f7f7;
   }
   
   .experiences__card button {
@@ -405,7 +413,7 @@
     background-color: #fff;
     color: #000;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     cursor: pointer;
     font-weight: 600;
     border-radius: 4px;
@@ -457,20 +465,12 @@
   }
 
   .giftcards__images img {
-    width: 650px;
+    width: 850px;
     height: auto;
     object-fit: contain;
   }
   
-  /* =============== HOSTING SECTION =============== */
-  .hosting {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 3rem 5%;
-    gap: 2rem;
-    background-color: #fff;
-  }
+  /* Additional hosting styles */
   
   .hosting__image {
     flex: 1;

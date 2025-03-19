@@ -1,0 +1,52 @@
+.sleep-container {
+  margin: 40px 0;
+  padding: 0;
+}
+
+.sleep-container h2 {
+  font-size: 22px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #222222;
+}
+
+.sleep-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.sleep-item {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 274px;
+}
+
+.sleep-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.sleep-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sleep-details {
+  padding: 16px;
+}
+
+.sleep-details h3 {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #222222;
+}
+
+.sleep-details p {
+  color: #717171;
+  font-size: 14px;
+  margin: 0;
+}

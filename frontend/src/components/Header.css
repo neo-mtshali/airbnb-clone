@@ -2,23 +2,35 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #000; /* Black navbar */
-    color: #fff;
+    background-color: #000000; /* Black navbar */
+    color: #ffffff;
     padding: 1rem 5%;
     position: relative;
+    height: 80px;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  
+  .airbnb-logo-1 {
+    height: 120px;
+    width: auto;
+    fill: #ffffff;
+    display: block;
+    filter: brightness(0) invert(1);
   }
   
-  .header__logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: lowercase;
-    cursor: pointer;
+  .logo-icon {
+    font-size: 1.8rem;
   }
   
   .header__nav ul {
     display: flex;
     list-style: none;
     gap: 1.5rem;
+    margin: 0;
+    padding: 0;
   }
   
   .header__nav li {
@@ -47,14 +59,61 @@
     color: #ddd;
   }
   
-  .header__globe,
+  .become-host-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .header__globe {
+    padding: 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 22px;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+  .header__globe:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
   .header__profile {
     cursor: pointer;
     display: flex;
     align-items: center;
   }
   
-  .header__profile i {
-    margin-right: 0.5rem;
+  .profile-button {
+    display: flex;
+    height: 40px;
+    width: 80px;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 5px 5px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    background: none;
+    cursor: pointer;
+    background-color: white;
+    color: #fff;
+  }
+  
+  .profile-button:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .menu-icon {
+    font-size: 16px;
+  }
+  
+  .user-icon {
+    font-size: 30px;
+  }
+  
+  .user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   

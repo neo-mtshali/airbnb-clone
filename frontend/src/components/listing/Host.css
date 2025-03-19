@@ -1,13 +1,14 @@
 .host-profile {
   padding: 24px 0;
   border-bottom: 1px solid #dddddd;
-  font-family: 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  max-width: 1120px;
 }
 
 .host-profile__header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .host-profile__image {
@@ -23,19 +24,22 @@
   font-weight: 600;
   margin: 0 0 4px 0;
   color: #222222;
+  line-height: 26px;
 }
 
 .host-profile__info p {
   font-size: 14px;
   color: #717171;
   margin: 0;
+  line-height: 18px;
 }
 
 .host-profile__stats {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .host-profile__stat {
@@ -51,33 +55,52 @@
   color: #222222;
 }
 
-.host-profile__badge {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #222222;
+.host-profile__icon.star {
+  color: #FF385C;
 }
 
-.host-profile__badge span {
-  font-weight: 600;
+.host-profile__icon.check {
+  color: #00A699;
+}
+
+.host-profile__stat.reviews,
+.host-profile__stat.verified,
+.host-profile__stat.superhost {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.host-profile__stat.superhost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.superhost-badge {
+  height: 16px;
+  width: auto;
 }
 
 .host-profile__superhost-info {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
-.host-profile__superhost-info h3 {
+.superhost-title {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 8px 0;
   color: #222222;
 }
 
-.host-profile__superhost-info p {
+.superhost-description {
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 20px;
   color: #717171;
   margin: 0;
+}
+
+.host-profile__superhost-info p {
   max-width: 450px;
 }
 
@@ -85,10 +108,11 @@
   margin-bottom: 24px;
 }
 
-.host-profile__response-item {
+.response-info {
   font-size: 14px;
   color: #222222;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  line-height: 20px;
 }
 
 .host-profile__contact {
@@ -96,14 +120,14 @@
 }
 
 .host-profile__contact-btn {
-  padding: 8px 16px;
+  padding: 13px 23px;
   background-color: white;
   border: 1px solid #222222;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .host-profile__contact-btn:hover {
@@ -121,7 +145,22 @@
 }
 
 .host-profile__payment-icon {
-  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.host-profile__payment-icon img {
+  width: 100%;
+  height: auto;
+}
+
+.host-profile__payment-info {
+  display: flex;
+  align-items: flex-start;
 }
 
 .host-profile__payment-info p {
@@ -129,4 +168,5 @@
   line-height: 1.4;
   color: #717171;
   margin: 0;
+  flex: 1;
 }

@@ -1,19 +1,56 @@
 .calendar {
   background: white;
   border-radius: 12px;
-  padding: 24px;
+  padding: 24px 0;
   width: 100%;
-  max-width: 800px;
+  max-width: 850px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  border-top: 1px solid #f0f0f0;
 }
 
-.calendar-header {
+/* Trip Summary Header */
+.calendar-trip-summary {
+  padding: 0 24px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.calendar-trip-summary h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #222222;
+}
+
+.date-range {
+  color: #717171;
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Month Navigation */
+.calendar-months-navigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  padding: 0 24px;
 }
 
-.calendar-header button {
+.month-titles {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.month-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #222222;
+  text-align: center;
+  flex: 1;
+}
+
+.month-nav-button {
   background: none;
   border: 1px solid #DDDDDD;
   border-radius: 50%;
@@ -24,29 +61,47 @@
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 16px;
+  color: #222222;
 }
 
-.calendar-header button:hover {
+.month-nav-button:hover {
   background-color: #F7F7F7;
 }
 
-.calendar-header h3 {
+.calendar-container {
+  display: flex;
+  padding: 16px 24px 0;
+  justify-content: space-between;
+}
+
+.calendar-month {
+  flex: 1;
+  min-width: 0;
+}
+
+.calendar-month-header {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.calendar-month-header h3 {
   font-size: 16px;
   font-weight: 600;
+  margin: 0;
 }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
-  margin-bottom: 16px;
 }
 
 .calendar-day-header {
   text-align: center;
   font-size: 12px;
   font-weight: 600;
-  padding: 8px;
+  padding: 8px 0;
   color: #717171;
 }
 
@@ -58,9 +113,22 @@
   position: relative;
   cursor: pointer;
   transition: background-color 0.2s;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px;
+  padding: 0;
+  z-index: 1;
+  outline: none;
+  pointer-events: auto !important;
+  color: #222222;
+  box-sizing: border-box;
 }
 
-.calendar-day:hover:not(.different-month):not(.unavailable) {
+.calendar-day:hover:not(.different-month):not(.unavailable):not(.check-in):not(.check-out) {
   background-color: #F7F7F7;
 }
 
@@ -69,15 +137,43 @@
   cursor: default;
 }
 
+.calendar-day.today {
+  font-weight: bold;
+  border: 1px solid #222222;
+}
+
 .calendar-day.selected {
   background-color: #222222;
   color: white;
   border-radius: 50%;
 }
 
-.calendar-day.in-range {
-  background-color: #F7F7F7;
+.calendar-day.check-in {
+  background-color: #222222 !important;
+  color: white !important;
+  position: relative;
+  z-index: 2;
+  border-radius: 50% !important;
 }
+
+.calendar-day.check-out {
+  background-color: #222222 !important;
+  color: white !important;
+  position: relative;
+  z-index: 2;
+  border-radius: 50% !important;
+}
+
+.calendar-day.in-range {
+  background-color: #F7F7F7 !important;
+  border-radius: 0 !important;
+  position: relative;
+  color: #222222;
+}
+
+/* Removed half-circle effect for check-in date to ensure full coloring */
+
+/* Removed half-circle effect for check-out date to ensure full coloring */
 
 .calendar-day.unavailable {
   text-decoration: line-through;
@@ -87,43 +183,40 @@
 
 .calendar-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid #DDDDDD;
+  padding-top: 20px;
+  margin-top: 16px;
 }
 
 .clear-dates {
   background: none;
   border: none;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 8px 16px;
   font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
   color: #222222;
-}
-
-.close-calendar {
-  background: #222222;
-  color: white;
-  border: none;
-  border-radius: 8px;
   padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s;
 }
 
-.close-calendar:hover {
-  transform: scale(1.02);
-}
-
-@media (max-width: 744px) {
+@media (max-width: 768px) {
+  .calendar-container {
+    flex-direction: column;
+  }
+  
   .calendar {
     padding: 16px;
   }
 
   .calendar-day {
+    width: 36px;
+    height: 36px;
     font-size: 12px;
   }
 }

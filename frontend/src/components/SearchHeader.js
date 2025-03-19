@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import './SearchHeader.css';
-import { FaAirbnb, FaGlobe, FaBars, FaUserCircle } from 'react-icons/fa';
 import SearchTabs from './SearchTabs';
+import airbnbLogo from '../assets/airbnb-logo.svg';
 
 const SearchHeader = () => {
   const [searchParams] = useSearchParams();
@@ -17,8 +17,7 @@ const SearchHeader = () => {
     <header className="search-header">
       <div className="search-header__left">
         <Link to="/" className="search-header__logo">
-          <FaAirbnb className="airbnb-logo" />
-          <span className="logo-text">airbnb</span>
+          <img src={airbnbLogo} alt="Airbnb" className="airbnb-logo-2" />
         </Link>
       </div>
 
@@ -27,12 +26,12 @@ const SearchHeader = () => {
       <div className="search-header__right">
         <button className="header-btn">Become a Host</button>
         <button className="header-btn">
-          <FaGlobe />
+          <i className="fas fa-globe"></i>
         </button>
         <div className="user-menu">
           <button className="user-menu-btn">
-            <FaBars />
-            <FaUserCircle />
+            <i className="fas fa-bars"></i>
+            <i className="fas fa-user-circle"></i>
           </button>
         </div>
       </div>

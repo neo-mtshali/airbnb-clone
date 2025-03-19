@@ -2,7 +2,7 @@
   position: relative;
   max-width: 850px;
   padding: 12px 0;
-
+  margin: 0 auto;
   background-color: transparent;
 }
 
@@ -76,9 +76,6 @@
 
 .search-button:hover {
   transform: scale(1.04);
-}
-
-.search-button:hover {
   background-color: #DE1162;
 }
 

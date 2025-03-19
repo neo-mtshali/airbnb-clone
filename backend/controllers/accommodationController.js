@@ -1,4 +1,6 @@
 const Accommodation = require('../models/Accommodation');
+const fs = require('fs');
+const path = require('path');
 
 // Get all accommodations
 exports.getAllAccommodations = async (req, res) => {
@@ -83,9 +85,57 @@ exports.deleteAccommodation = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized to delete this accommodation' });
     }
 
-    await accommodation.remove();
+    await Accommodation.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Accommodation deleted successfully' });
   } catch (error) {
     res.status(400).json({ message: 'Error deleting accommodation', error: error.message });
+  }
+};
+
+// Upload images for accommodation
+exports.uploadImages = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: 'No images uploaded' });
+    }
+
+    const accommodationId = req.params.id;
+    const accommodation = await Accommodation.findById(accommodationId);
+    
+    if (!accommodation) {
+      // Remove uploaded files if accommodation not found
+      req.files.forEach(file => {
+        fs.unlink(file.path, err => {
+          if (err) console.error('Error removing file:', err);
+        });
+      });
+      return res.status(404).json({ message: 'Accommodation not found' });
+    }
+
+    // Check if user is the host
+    if (accommodation.host.toString() !== req.user._id.toString()) {
+      // Remove uploaded files if not authorized
+      req.files.forEach(file => {
+        fs.unlink(file.path, err => {
+          if (err) console.error('Error removing file:', err);
+        });
+      });
+      return res.status(403).json({ message: 'Not authorized to update this accommodation' });
+    }
+
+    // Get file paths and add them to the accommodation's images array
+    const imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+    
+    // Update accommodation with new images
+    accommodation.images = [...accommodation.images, ...imagePaths];
+    await accommodation.save();
+    
+    res.status(200).json({ 
+      message: 'Images uploaded successfully',
+      images: imagePaths,
+      accommodation
+    });
+  } catch (error) {
+    res.status(400).json({ message: 'Error uploading images', error: error.message });
   }
 };

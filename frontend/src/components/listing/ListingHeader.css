@@ -6,24 +6,29 @@
   top: 0;
   background-color: white;
   z-index: 100;
+  display: flex;
+  align-items: center;
 }
 
 .header-container {
   max-width: 1280px;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo-container {
-  flex: 0 0 auto;
+  flex: 0 0 140px;
+  display: flex;
+  align-items: center;
 }
 
-.airbnb-logo {
-  height: 32px;
+.airbnb-logo-3 {
+  height: 34px;
   width: auto;
   display: block;
   color: #FF385C;
@@ -33,6 +38,9 @@
   flex: 0 1 auto;
   display: flex;
   justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .search-button {
@@ -40,11 +48,11 @@
   align-items: center;
   justify-content: space-between;
   height: 48px;
-  min-width: 300px;
+  width: 320px;
   border: 1px solid #DDDDDD;
   border-radius: 24px;
   background-color: white;
-  padding: 0 8px 0 18px;
+  padding: 0 8px 0 20px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: box-shadow 0.2s ease;
@@ -56,7 +64,7 @@
 
 .search-button span {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #222222;
 }
 
@@ -68,7 +76,7 @@
   height: 32px;
   background-color: #FF385C;
   border-radius: 50%;
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 .search-icon {
@@ -79,7 +87,9 @@
 .user-menu {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  flex: 0 0 140px;
+  justify-content: flex-end;
 }
 
 .become-host-button {
@@ -88,9 +98,11 @@
   font-size: 14px;
   font-weight: 600;
   color: #222222;
-  padding: 12px;
+  padding: 12px 15px;
   border-radius: 22px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .become-host-button:hover {
@@ -107,6 +119,8 @@
   border: none;
   background: none;
   cursor: pointer;
+  color: #222222;
+  font-size: 16px;
 }
 
 .language-button:hover {
@@ -116,7 +130,7 @@
 .profile-button {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 5px 5px 5px 12px;
   border: 1px solid #DDDDDD;
   border-radius: 21px;
@@ -128,8 +142,16 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
-.user-icon {
-  font-size: 30px;
+.menu-icon {
+  font-size: 16px;
+  color: #222222;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
   color: #717171;
 }
 

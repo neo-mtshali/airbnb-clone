@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
 import './SearchTabs.css';
 import DatePicker from './DatePicker';
 import LocationSearchModal from './LocationSearchModal';
@@ -96,7 +95,7 @@ const SearchTabs = ({ searchInfo }) => {
           onClick={handleSearch}
           aria-label="Search"
         >
-          <FaSearch />
+          <i className="fas fa-search"></i>
         </button>
 
         <LocationSearchModal

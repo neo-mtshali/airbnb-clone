@@ -1,12 +1,18 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
+import airbnbLogo from "../assets/airbnb-logo.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobe, faBars, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 function Header() {
   return (
     <header className="header">
       {/* Left: Logo */}
       <div className="header__logo">
-        <span>airbnb</span>
+        <Link to="/">
+          <img src={airbnbLogo} alt="Airbnb" className="airbnb-logo-1" />
+        </Link>
       </div>
 
       {/* Center: Nav Links */}
@@ -20,13 +26,19 @@ function Header() {
 
       {/* Right: Become a Host, Globe, Profile */}
       <div className="header__right">
-        <p>Become a Host</p>
-        <div className="header__globe">
-          <i className="fas fa-globe"></i>
-        </div>
+        <Link to="/admin" className="become-host-link">
+          <p>Become a Host</p>
+        </Link>
+        <button className="header__globe">
+          <FontAwesomeIcon icon={faGlobe} />
+        </button>
         <div className="header__profile">
-          <i className="fas fa-bars"></i>
-          <i className="fas fa-user-circle"></i>
+          <button className="profile-button">
+            <FontAwesomeIcon icon={faBars} className="menu-icon" />
+            <div className="user-avatar">
+              <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
+            </div>
+          </button>
         </div>
       </div>
     </header>

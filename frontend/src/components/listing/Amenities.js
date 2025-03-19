@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { FaWifi, FaParking, FaSwimmingPool, FaHotTub, 
-         FaUtensils, FaTv, FaWind, FaWater, FaDesktop, 
-         FaArrowsAltV, FaSnowflake, FaTshirt } from 'react-icons/fa';
 import './Amenities.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
 
 const Amenities = ({ amenities }) => {
   const [showAll, setShowAll] = useState(false);
@@ -11,18 +10,20 @@ const Amenities = ({ amenities }) => {
   const amenitiesArray = Array.isArray(amenities) ? amenities : [];
 
   const amenityIcons = {
-    wifi: FaWifi,
-    parking: FaParking,
-    pool: FaSwimmingPool,
-    hotTub: FaHotTub,
-    kitchen: FaUtensils,
-    tv: FaTv,
-    airConditioning: FaWind,
-    waterfront: FaWater,
-    workspace: FaDesktop,
-    elevator: FaArrowsAltV,
-    heating: FaSnowflake,
-    washer: FaTshirt
+    wifi: 'fas fa-wifi',
+    parking: 'fas fa-parking',
+    pool: 'fas fa-swimming-pool',
+    hotTub: 'fas fa-hot-tub',
+    kitchen: 'fas fa-utensils',
+    tv: 'fas fa-tv',
+    airConditioning: 'fas fa-wind',
+    waterfront: 'fas fa-water',
+    workspace: 'fas fa-desktop',
+    elevator: 'fas fa-arrows-alt-v',
+    heating: 'fas fa-snowflake',
+    washer: 'fas fa-tshirt',
+    patio: { type: 'fa', icon: faTag },
+    beachfront: { type: 'fa', icon: faTag }
   };
 
   const displayAmenities = showAll ? amenitiesArray : amenitiesArray.slice(0, 6);
@@ -32,10 +33,20 @@ const Amenities = ({ amenities }) => {
       <h2>What this place offers</h2>
       <div className="amenities-grid">
         {displayAmenities.map((amenity, index) => {
-          const Icon = amenityIcons[amenity.icon] || FaWifi;
+          const iconData = amenityIcons[amenity.icon];
           return (
             <div key={index} className="amenity-item">
-              <Icon />
+              {iconData ? (
+                typeof iconData === 'string' ? (
+                  <i className={iconData}></i>
+                ) : iconData.type === 'fa' ? (
+                  <FontAwesomeIcon icon={iconData.icon} />
+                ) : (
+                  <FontAwesomeIcon icon={faTag} className="fa-thin" />
+                )
+              ) : (
+                <FontAwesomeIcon icon={faTag} className="fa-thin" />
+              )}
               <span>{amenity.name}</span>
             </div>
           );

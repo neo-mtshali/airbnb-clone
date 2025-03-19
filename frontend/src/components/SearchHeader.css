@@ -1,5 +1,6 @@
 .search-header {
   display: flex;
+  height: 80px;
   justify-content: space-between;
   align-items: center;
   padding: 16px 80px;
@@ -21,8 +22,11 @@
   color: #FF385C;
 }
 
-.airbnb-logo {
-  font-size: 32px;
+.airbnb-logo-2 {
+  height: 120px;
+  width: auto;
+  fill: #ffffff;
+  display: block;
 }
 
 .logo-text {
@@ -103,13 +107,24 @@
 
 .user-menu-btn {
   display: flex;
+  height: 40px;
+  width: 80px;
   align-items: center;
   gap: 12px;
   padding: 5px 5px 5px 12px;
   border: 1px solid #ddd;
-  border-radius: 21px;
+  border-radius: 30px;
   background: none;
   cursor: pointer;
+}
+
+.fa-circle-user, .fa-user-circle{
+  font-size: 30px;
+}
+
+.fa-bars, .fa-navicon {
+  font-size: 16px;
+  font-weight: 200;
 }
 
 .user-menu-btn:hover {

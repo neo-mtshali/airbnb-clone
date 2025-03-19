@@ -6,14 +6,12 @@
 .amenities-section h2 {
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 24px;
 }
 
 .amenities-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px 24px;
-  margin-bottom: 24px;
 }
 
 .amenity-item {
@@ -63,7 +61,6 @@
   top: 0;
   background: white;
   padding: 16px 0;
-  margin-bottom: 24px;
   border-bottom: 1px solid #DDDDDD;
 }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FaExpand } from 'react-icons/fa';
 import './ImageGallery.css';
 
 const ImageGallery = ({ images }) => {
@@ -22,7 +21,7 @@ const ImageGallery = ({ images }) => {
           className="show-all-photos"
           onClick={() => setShowAllPhotos(true)}
         >
-          <FaExpand /> Show all photos
+          <i className="fas fa-expand"></i> Show all photos
         </button>
       </div>
 

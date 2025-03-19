@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaStar, FaShare, FaRegHeart, FaMapMarkerAlt, FaBed, FaBath, FaUsers } from 'react-icons/fa';
 import ImageGallery from '../components/listing/ImageGallery';
 import ListingHeader from '../components/listing/ListingHeader';
 import ReservationForm from '../components/listing/ReservationForm';
@@ -9,14 +8,17 @@ import Calendar from '../components/listing/Calendar';
 import Reviews from '../components/listing/Reviews';
 import Rules from '../components/listing/Rules';
 import Host from '../components/listing/Host';
+import Sleep from '../components/listing/Sleep';
 import ExploreOptions from '../components/listing/ExploreOptions';
 import { accommodationApi } from '../services/api';
+import avatarImage from '../assets/Avatar.png';
 import './Listing.css';
 
 const Listing = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dates, setDates] = useState({ checkIn: null, checkOut: null });
 
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -128,19 +130,19 @@ const Listing = () => {
           <h1>{listing.title}</h1>
           <div className="listing-subheader">
             <div className="listing-rating">
-              <FaStar className="star-icon" />
+              <i className="fas fa-star star-icon"></i>
               <span>{listing.rating || 'New'}</span>
               <span className="dot">·</span>
               <span className="reviews-count">{listing.reviews || 0} reviews</span>
               <span className="dot">·</span>
-              <span className="listing-location"><FaMapMarkerAlt /> {listing.location}</span>
+              <span className="listing-location"><i className="fas fa-map-marker-alt"></i> {listing.location}</span>
             </div>
             <div className="listing-actions">
               <button className="action-button">
-                <FaShare /> Share
+                <i className="fas fa-share"></i> Share
               </button>
               <button className="action-button">
-                <FaRegHeart /> Save
+                <i className="far fa-heart"></i> Save
               </button>
             </div>
           </div>
@@ -160,20 +162,89 @@ const Listing = () => {
 
           <div className="divider"></div>
 
-          <div className="listing-description">
-            <h2>Entire rental unit hosted by {listing.host.name}</h2>
-            <div className="property-specs">
-              <span><FaUsers /> {listing.maxGuests} guests</span>
-              <span><FaBed /> {listing.bedrooms} bedroom</span>
-              <span><FaBath /> {listing.bathrooms} bath</span>
+          <div className="listing-description-container">
+            <div className="listing-description">
+              <h2>Entire rental unit hosted by {listing.host.name}</h2>
+              <div className="property-specs">
+                <span>{listing.maxGuests} guests</span>
+                <span>{listing.bedrooms} bedroom</span>
+                <span>{listing.bedrooms} bed</span>
+                <span>{listing.bathrooms} bath</span>
+              </div>
+            </div>
+            <div className="host-avatar">
+              <img src={avatarImage} alt={`${listing.host.name}`} />
+              {listing.host.isSuperhost && <div className="superhost-badge"><i className="fas fa-medal"></i></div>}
             </div>
           </div>
 
           <div className="divider"></div>
 
+          <div className="listing-quick-details">
+            <div className="quick-detail-item">
+              <div className="quick-detail-icon">
+                <i className="fas fa-home"></i>
+              </div>
+              <div className="quick-detail-text">
+                <h3>Entire home</h3>
+                <p>You'll have the apartment to yourself</p>
+              </div>
+            </div>
+            
+            <div className="quick-detail-item">
+              <div className="quick-detail-icon">
+                <i className="fas fa-star"></i>
+              </div>
+              <div className="quick-detail-text">
+                <h3>Enhanced Clean</h3>
+                <p>This Host committed to Airbnb's 5-step enhanced cleaning process. <span className="show-more">Show more</span></p>
+              </div>
+            </div>
+            
+            <div className="quick-detail-item">
+              <div className="quick-detail-icon">
+                <i className="fas fa-door-open"></i>
+              </div>
+              <div className="quick-detail-text">
+                <h3>Self check-in</h3>
+                <p>Check yourself in with the keypad.</p>
+              </div>
+            </div>
+            
+            <div className="quick-detail-item">
+              <div className="quick-detail-icon">
+                <i className="far fa-calendar-alt"></i>
+              </div>
+              <div className="quick-detail-text">
+                <h3>
+                  {dates.checkIn ? 
+                    `Free cancellation before ${new Date(dates.checkIn.getTime() - (5 * 24 * 60 * 60 * 1000)).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}` :
+                    'Free cancellation before check-in'
+                  }
+                </h3>
+                <p>Cancel before check-in for a partial refund.</p>
+              </div>
+            </div>
+          </div>
+          
           <div className="divider"></div>
 
           <p>{listing.description}</p>
+
+          <div className="divider"></div>
+          
+          <Sleep 
+            bedrooms={listing.bedrooms} 
+            beds={[
+              listing.bedrooms > 0 ? '1 queen bed' : '',
+              listing.bedrooms > 1 ? '1 double bed' : '',
+              listing.bedrooms > 2 ? '2 single beds' : '',
+            ].filter(Boolean)}
+            images={listing.images && listing.images.length > 0 ? 
+              [listing.images[0], ...listing.images.slice(1, listing.bedrooms)] : 
+              undefined
+            }
+          />
 
           <div className="divider"></div>
 
@@ -182,8 +253,8 @@ const Listing = () => {
           <div className="divider"></div>
 
           <Calendar 
-            dates={{}}
-            setDates={() => {}}
+            dates={dates}
+            setDates={setDates}
             availableDates={listing.availableDates || []}
           />
 
@@ -220,6 +291,8 @@ const Listing = () => {
             rating={listing.rating}
             reviews={listing.reviews || 0}
             maxGuests={listing.maxGuests}
+            dates={dates}
+            setDates={setDates}
           />
         </div>
       </div>

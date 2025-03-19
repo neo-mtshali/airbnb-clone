@@ -6,13 +6,31 @@
   padding: 24px;
   background: white;
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .price-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
+}
+
+.form-title {
   margin-bottom: 24px;
+}
+
+.form-title h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #222222;
+}
+
+.form-title .date-range {
+  font-size: 14px;
+  color: #717171;
+  margin: 0;
 }
 
 .price {
@@ -46,12 +64,14 @@
   border: 1px solid #B0B0B0;
   border-radius: 8px;
   margin-bottom: 16px;
+  overflow: hidden;
 }
 
 .dates-input {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid #B0B0B0;
+  cursor: pointer;
 }
 
 .check-in, .check-out {
@@ -69,6 +89,7 @@
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 4px;
+  color: #222222;
 }
 
 .dates-input input,
@@ -78,6 +99,11 @@
   background: none;
   font-size: 14px;
   color: #222222;
+  cursor: inherit;
+}
+
+.dates-input input {
+  cursor: pointer;
 }
 
 .dates-input input::placeholder {
@@ -86,6 +112,24 @@
 
 .guests-input {
   padding: 12px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  appearance: none;
+  padding-right: 20px;
+}
+
+.select-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #222222;
+  pointer-events: none;
 }
 
 .reserve-button {
@@ -127,7 +171,7 @@
   color: #222222;
 }
 
-.price-item span {
+.price-item span:first-child {
   text-decoration: underline;
   cursor: pointer;
 }
@@ -144,14 +188,47 @@
 
 .calendar-modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.calendar-modal .calendar-container {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  z-index: 1001;
+}
+
+.close-calendar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #717171;
+  z-index: 1002;
 }
 
 @media (max-width: 744px) {
@@ -167,5 +244,16 @@
 
   .price-breakdown {
     display: none;
+  }
+  
+  .calendar-modal .calendar-container {
+    width: 100%;
+    max-width: 100%;
+    height: 80vh;
+    border-radius: 12px 12px 0 0;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    transform: none;
   }
 }

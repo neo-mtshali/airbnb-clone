@@ -1,0 +1,226 @@
+/* UpdateListing.css */
+
+.update-listing-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.update-listing-title {
+  margin-bottom: 30px !important;
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  color: #222222;
+}
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #4362ee;
+  font-size: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-field {
+  flex: 1;
+}
+
+.short-input {
+  width: 100% !important;
+}
+
+.amenities-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.images-area {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.upload-button {
+  background-color: #4362ee !important;
+  color: white !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.update-button {
+  background-color: #4362ee !important;
+  color: white !important;
+  width: 180px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+}
+
+.cancel-button {
+  background-color: #e31c5f !important;
+  color: white !important;
+  width: 180px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+}
+
+/* Style for TextFields */
+.MuiOutlinedInput-root {
+  border-radius: 8px !important;
+}
+
+/* Style for the dropdown */
+.type-dropdown {
+  width: 100%;
+  border-radius: 8px;
+}
+
+
+.logo {
+  color: #ff385c;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Images container styling */
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.image-box {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  background-color: #f8f8f8;
+}
+
+.listing-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.delete-btn {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  color: #e31c5f !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 16px !important;
+  border-radius: 50% !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.delete-btn:hover {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Upload button styling */
+.upload-box {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
+
+.upload-btn {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  color: #717171 !important;
+  min-width: unset !important;
+  border-radius: 12px !important;
+}
+
+.upload-btn svg {
+  font-size: 28px;
+  color: #4362ee;
+}
+
+.add-amenity-btn {
+  background-color: #4362ee !important;
+  color: white !important;
+  text-transform: none !important;
+  border-radius: 4px !important;
+  height: 40px !important;
+}
+
+/* Submit Buttons Container */
+.buttons-container {
+  display: flex;
+  gap: 16px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.update-btn {
+  background-color: #4362ee !important;
+  color: white !important;
+  padding: 12px 24px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  min-width: 150px !important;
+}
+
+.cancel-btn {
+  padding: 12px 24px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  min-width: 120px !important;
+  border-color: #e0e0e0 !important;
+  color: #717171 !important;
+}

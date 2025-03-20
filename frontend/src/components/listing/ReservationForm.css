@@ -7,17 +7,21 @@
   background: white;
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 100%;
+  max-width: 370px;
 }
 
 .price-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  gap: 12px;
 }
 
 .form-title {
   margin-bottom: 24px;
+  display: none; /* Hide this section as it's not in the design */
 }
 
 .form-title h3 {
@@ -40,13 +44,15 @@
 }
 
 .price .amount {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
+  color: #222;
 }
 
 .price .per-night {
   font-size: 16px;
   color: #222222;
+  font-weight: 400;
 }
 
 .rating {
@@ -54,6 +60,7 @@
   align-items: center;
   gap: 4px;
   font-size: 14px;
+  color: #717171;
 }
 
 .rating svg {
@@ -61,39 +68,41 @@
 }
 
 .booking-inputs {
-  border: 1px solid #B0B0B0;
+  border: 1px solid #DDDDDD;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
 }
 
+.dates-row {
+  border-bottom: 1px solid #DDDDDD;
+}
+
 .dates-input {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid #B0B0B0;
   cursor: pointer;
 }
 
 .check-in, .check-out {
-  padding: 12px;
+  padding: 10px 16px;
 }
 
 .check-in {
-  border-right: 1px solid #B0B0B0;
+  border-right: 1px solid #DDDDDD;
 }
 
 .dates-input label,
 .guests-input label {
   display: block;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
   color: #222222;
 }
 
-.dates-input input,
-.guests-input select {
+.date-value,
+.guest-value {
   width: 100%;
   border: none;
   background: none;
@@ -102,32 +111,27 @@
   cursor: inherit;
 }
 
-.dates-input input {
+.date-value {
   cursor: pointer;
 }
 
-.dates-input input::placeholder {
-  color: #717171;
-}
+
+
+/* Guest row styles */
 
 .guests-input {
-  padding: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
 }
 
-.select-wrapper {
+.guest-value-wrapper {
   position: relative;
-}
-
-.select-wrapper select {
-  appearance: none;
-  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .select-icon {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   color: #222222;
   pointer-events: none;
 }
@@ -138,11 +142,11 @@
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 14px;
+  padding: 14px 0;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin: 16px 0;
+  margin: 16px 0 8px 0;
   transition: background-color 0.2s;
 }
 
@@ -153,8 +157,9 @@
 .no-charge-text {
   text-align: center;
   font-size: 14px;
-  margin: 0 0 16px 0;
+  margin: 0 0 24px 0;
   color: #222222;
+  font-weight: 400;
 }
 
 .price-breakdown {

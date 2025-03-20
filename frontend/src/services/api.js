@@ -28,7 +28,7 @@ api.interceptors.request.use(
 export const accommodationApi = {
   getAllAccommodations: () => api.get('/accommodations'),
   getAccommodationById: (id) => api.get(`/accommodations/${id}`),
-  searchAccommodations: (params) => api.get('/accommodations', { params }),
+  searchAccommodations: (params) => api.get('/accommodations/search', { params }),
   createAccommodation: (data) => api.post('/accommodations', data),
   updateAccommodation: (id, data) => api.put(`/accommodations/${id}`, data),
   deleteAccommodation: (id) => api.delete(`/accommodations/${id}`),

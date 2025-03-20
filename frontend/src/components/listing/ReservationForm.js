@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from './Calendar';
+import DatePicker from '../../components/DatePicker';
+import GuestSearchModal from '../../components/GuestSearchModal';
 import './ReservationForm.css';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const ReservationForm = ({ price = 125, rating = 4.92, reviews = 372, maxGuests = 4, dates = {}, setDates = () => {} }) => {
   // Use the dates passed from the parent component
-  const [guests, setGuests] = useState(1);
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guests, setGuests] = useState({
+    adults: 1,
+    children: 0,
+    infants: 0,
+    pets: false
+  });
+  const { formatPrice } = useCurrency();
 
   const formatDate = (date) => {
     if (!date) return '';
@@ -40,9 +49,23 @@ const ReservationForm = ({ price = 125, rating = 4.92, reviews = 372, maxGuests 
     };
   };
 
-  const handleCloseCalendar = () => {
-    setShowCalendar(false);
+  const handleCloseDatePicker = () => {
+    setShowDatePicker(false);
   };
+
+  const handleCloseGuestModal = () => {
+    setShowGuestModal(false);
+  };
+  
+  const handleDateSelect = (startDate, endDate) => {
+    setDates({
+      checkIn: startDate,
+      checkOut: endDate
+    });
+    setShowDatePicker(false);
+  };
+  
+  const totalGuests = guests.adults + guests.children;
 
   const total = calculateTotal();
 
@@ -50,64 +73,60 @@ const ReservationForm = ({ price = 125, rating = 4.92, reviews = 372, maxGuests 
     <div className="reservation-form">
       <div className="price-header">
         <div className="price">
-          <span className="amount">${price}</span>
+          <span className="amount">{formatPrice(price)}</span>
           <span className="per-night">night</span>
         </div>
         <div className="rating">
-          <i className="fas fa-star"></i>
-          <span>{rating}</span>
-          <span className="dot">·</span>
-          <span className="reviews">{reviews} reviews</span>
+          {typeof rating === 'number' ? (
+            <>
+              <i className="fas fa-star"></i>
+              <span>{rating}</span>
+              <span className="dot">·</span>
+              <span className="reviews">{reviews} reviews</span>
+            </>
+          ) : (
+            <>
+              <i className="fas fa-star"></i>
+              <span>New</span>
+              <span className="dot">·</span>
+              <span className="reviews">{reviews || 0} reviews</span>
+            </>
+          )}
         </div>
       </div>
 
-      <div className="form-title">
-        {dates.checkIn && dates.checkOut && (
+      {dates.checkIn && dates.checkOut && (
+        <div className="form-title">
           <h3>
             {Math.ceil((dates.checkOut - dates.checkIn) / (1000 * 60 * 60 * 24))} nights in New York
           </h3>
-        )}
-        {dates.checkIn && dates.checkOut && (
           <p className="date-range">{formatDateWithYear(dates.checkIn)} - {formatDateWithYear(dates.checkOut)}</p>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="booking-inputs">
-        <div className="dates-input" onClick={() => setShowCalendar(true)}>
-          <div className="check-in">
-            <label>CHECK-IN</label>
-            <input 
-              type="text" 
-              readOnly 
-              value={dates.checkIn ? formatDate(dates.checkIn) : 'Add date'} 
-              placeholder="Add date"
-            />
-          </div>
-          <div className="check-out">
-            <label>CHECKOUT</label>
-            <input 
-              type="text" 
-              readOnly 
-              value={dates.checkOut ? formatDate(dates.checkOut) : 'Add date'} 
-              placeholder="Add date"
-            />
+        <div className="dates-row">
+          <div className="dates-input" onClick={() => setShowDatePicker(true)}>
+            <div className="check-in">
+              <label>CHECK-IN</label>
+              <div className="date-value">{dates.checkIn ? formatDate(dates.checkIn) : 'Add date'}</div>
+            </div>
+            <div className="check-out">
+              <label>CHECKOUT</label>
+              <div className="date-value">{dates.checkOut ? formatDate(dates.checkOut) : 'Add date'}</div>
+            </div>
           </div>
         </div>
-
-        <div className="guests-input">
-          <label>GUESTS</label>
-          <div className="select-wrapper">
-            <select 
-              value={guests} 
-              onChange={(e) => setGuests(Number(e.target.value))}
-            >
-              {[...Array(maxGuests)].map((_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {i + 1} guest{i !== 0 ? 's' : ''}
-                </option>
-              ))}
-            </select>
-            <i className="fas fa-chevron-down select-icon"></i>
+        
+        <div className="guests-row">
+          <div className="guests-input" onClick={() => setShowGuestModal(true)}>
+            <label>GUESTS</label>
+            <div className="guest-value-wrapper">
+              <div className="guest-value">
+                {`${totalGuests} guest${totalGuests !== 1 ? 's' : ''}`}
+              </div>
+              <i className="fas fa-chevron-down select-icon"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -121,37 +140,36 @@ const ReservationForm = ({ price = 125, rating = 4.92, reviews = 372, maxGuests 
       {total && (
         <div className="price-breakdown">
           <div className="price-item">
-            <span>${price} × {total.nights} nights</span>
-            <span>${total.subtotal}</span>
+            <span>{formatPrice(price)} × {total.nights} nights</span>
+            <span>{formatPrice(total.subtotal)}</span>
           </div>
           <div className="price-item">
             <span>Cleaning fee</span>
-            <span>${total.cleaningFee}</span>
+            <span>{formatPrice(total.cleaningFee)}</span>
           </div>
           <div className="price-item">
             <span>Service fee</span>
-            <span>${total.serviceFee}</span>
+            <span>{formatPrice(total.serviceFee)}</span>
           </div>
           <div className="total">
             <span>Total</span>
-            <span>${total.total}</span>
+            <span>{formatPrice(total.total)}</span>
           </div>
         </div>
       )}
 
-      {showCalendar && (
-        <div className="calendar-modal">
-          <div className="calendar-overlay" onClick={handleCloseCalendar}></div>
-          <div className="calendar-container">
-            <button className="close-calendar" onClick={handleCloseCalendar}>×</button>
-            <Calendar 
-              dates={dates}
-              setDates={setDates}
-              onClose={handleCloseCalendar}
-            />
-          </div>
-        </div>
-      )}
+      <DatePicker 
+        isOpen={showDatePicker} 
+        onClose={handleCloseDatePicker} 
+        onDateSelect={handleDateSelect} 
+      />
+
+      <GuestSearchModal
+        isOpen={showGuestModal}
+        onClose={handleCloseGuestModal}
+        guests={guests}
+        onGuestsChange={setGuests}
+      />
     </div>
   );
 };

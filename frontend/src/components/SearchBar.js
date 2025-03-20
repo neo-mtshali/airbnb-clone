@@ -95,7 +95,7 @@ function SearchBar() {
           )}
         </div>
         <button 
-          className="search-button"
+          className="search-button-home"
           onClick={() => {
             const searchParams = new URLSearchParams({
               location: document.querySelector('.location input').value,

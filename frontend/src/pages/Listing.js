@@ -4,7 +4,7 @@ import ImageGallery from '../components/listing/ImageGallery';
 import ListingHeader from '../components/listing/ListingHeader';
 import ReservationForm from '../components/listing/ReservationForm';
 import Amenities from '../components/listing/Amenities';
-import Calendar from '../components/listing/Calendar';
+import DatePicker from '../components/DatePicker';
 import Reviews from '../components/listing/Reviews';
 import Rules from '../components/listing/Rules';
 import Host from '../components/listing/Host';
@@ -12,16 +12,20 @@ import Sleep from '../components/listing/Sleep';
 import ExploreOptions from '../components/listing/ExploreOptions';
 import { accommodationApi } from '../services/api';
 import avatarImage from '../assets/Avatar.png';
+import superhostBadge from '../assets/Airbnb Superhost Badge.png';
 import './Listing.css';
+import { useCurrency } from '../context/CurrencyContext';
 
 const Listing = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({ checkIn: null, checkOut: null });
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -32,11 +36,18 @@ const Listing = () => {
         // Transform API data to match our component needs
         const listingData = {
           ...response.data,
+          // Extract host properties directly for new component approach
+          host_name: response.data.host_name,
+          host_picture_url: response.data.host_picture_url,
+          host_since: response.data.host_since,
+          host_is_superhost: response.data.host_is_superhost,
+          number_of_reviews: response.data.number_of_reviews,
+          // Keep the legacy host object for backward compatibility
           host: response.data.host || {
-            name: 'Host',
-            image: 'https://via.placeholder.com/64',
-            joinDate: 'January 2023',
-            isSuperhost: false
+            name: response.data.host_name || 'Host',
+            image: response.data.host_picture_url || 'https://via.placeholder.com/64',
+            joinDate: response.data.host_since || 'January 2023',
+            isSuperhost: response.data.host_is_superhost || false
           },
           images: response.data.images && response.data.images.length > 0 
             ? response.data.images 
@@ -148,23 +159,13 @@ const Listing = () => {
           </div>
         </div>
 
-      <ImageGallery images={listing.images} />
+      <ImageGallery images={listing.images} picture_url={listing.picture_url} />
 
       <div className="listing-content">
         <div className="listing-main">
-          <div className="host-info-section">
-            <div className="host-info-header">
-              <h2>Entire rental unit hosted by {listing.host.name}</h2>
-              <img src={listing.host.image} alt={listing.host.name} className="host-image" />
-            </div>
-
-          </div>
-
-          <div className="divider"></div>
-
           <div className="listing-description-container">
             <div className="listing-description">
-              <h2>Entire rental unit hosted by {listing.host.name}</h2>
+              <h2>Entire rental unit hosted by {listing.host_name || (listing.host && listing.host.name) || 'Host'}</h2>
               <div className="property-specs">
                 <span>{listing.maxGuests} guests</span>
                 <span>{listing.bedrooms} bedroom</span>
@@ -173,8 +174,12 @@ const Listing = () => {
               </div>
             </div>
             <div className="host-avatar">
-              <img src={avatarImage} alt={`${listing.host.name}`} />
-              {listing.host.isSuperhost && <div className="superhost-badge"><i className="fas fa-medal"></i></div>}
+              <img src={listing.host_picture_url || (listing.host && listing.host.image) || avatarImage} alt={`${listing.host_name || (listing.host && listing.host.name) || 'Host'}`} />
+              {(listing.host_is_superhost || (listing.host && listing.host.isSuperhost)) && (
+                <div className="superhost-badge-container">
+                  <img src={superhostBadge} alt="Superhost" className="superhost-badge" />
+                </div>
+              )}
             </div>
           </div>
 
@@ -252,11 +257,29 @@ const Listing = () => {
           
           <div className="divider"></div>
 
-          <Calendar 
-            dates={dates}
-            setDates={setDates}
-            availableDates={listing.availableDates || []}
-          />
+          <div className="listing-availability-section">
+            <h2>Availability</h2>
+            <p>Add your travel dates for exact pricing</p>
+            <button 
+              className="availability-button" 
+              onClick={() => setShowDatePicker(true)}
+            >
+              {dates.checkIn && dates.checkOut 
+                ? `${dates.checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${dates.checkOut.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` 
+                : 'Check availability'}
+            </button>
+            <DatePicker 
+              isOpen={showDatePicker} 
+              onClose={() => setShowDatePicker(false)} 
+              onDateSelect={(startDate, endDate) => {
+                setDates({
+                  checkIn: startDate,
+                  checkOut: endDate
+                });
+                setShowDatePicker(false);
+              }} 
+            />
+          </div>
 
           <div className="divider"></div>
 
@@ -269,11 +292,17 @@ const Listing = () => {
           
 
           <Host 
-            hostImage={listing.host.image}
-            hostName={listing.host.name}
-            joinDate={listing.host.joinDate}
+            host_picture_url={listing.host_picture_url}
+            host_name={listing.host_name}
+            host_since={listing.host_since}
+            number_of_reviews={listing.number_of_reviews || listing.reviews || 0}
+            host_is_superhost={listing.host_is_superhost}
+            /* Keep old props for backward compatibility */
+            hostImage={listing.host?.image}
+            hostName={listing.host?.name}
+            joinDate={listing.host?.joinDate}
             reviews={listing.reviews || 0}
-            isSuperhost={listing.host.isSuperhost}
+            isSuperhost={listing.host?.isSuperhost}
           />
 
           <div className="divider"></div>

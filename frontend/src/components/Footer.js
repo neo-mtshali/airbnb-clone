@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Footer.css";
+import { useCurrency, CURRENCIES } from "../context/CurrencyContext";
 
 function Footer() {
+  const { currency, setCurrency, currencies } = useCurrency();
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowCurrencyDropdown(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
+  const handleCurrencyChange = (currencyCode) => {
+    setCurrency(currencyCode);
+    setShowCurrencyDropdown(false);
+  };
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -55,7 +78,29 @@ function Footer() {
           <p>© 2022 Airbnb, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Sitemap</a></p>
           <div className="footer-right">
             <span className="footer-language">🌐 English (US)</span>
-            <span className="footer-currency">$ USD</span>
+            <div className="footer-currency-container" ref={dropdownRef}>
+              <button 
+                className="footer-currency" 
+                onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+              >
+                {currencies[currency].symbol} {currency}
+              </button>
+              {showCurrencyDropdown && (
+                <div className="currency-dropdown">
+                  {Object.keys(currencies).map((currencyCode) => (
+                    <div 
+                      key={currencyCode} 
+                      className={`currency-option ${currencyCode === currency ? 'active' : ''}`}
+                      onClick={() => handleCurrencyChange(currencyCode)}
+                    >
+                      <span className="currency-symbol">{currencies[currencyCode].symbol}</span>
+                      <span className="currency-code">{currencyCode}</span>
+                      <span className="currency-name">{currencies[currencyCode].name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <span className="footer-socials">
               <a href="#"><i className="fab fa-facebook"></i></a>
               <a href="#"><i className="fab fa-twitter"></i></a>

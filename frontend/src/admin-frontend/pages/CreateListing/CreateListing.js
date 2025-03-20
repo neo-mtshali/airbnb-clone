@@ -25,13 +25,15 @@ const CreateListing = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    title: '',
+    name: '',
     description: '',
-    location: '',
-    area: '',
-    rooms: '',
-    baths: '',
-    type: '',
+    host_location: '',
+    property_type: '',
+    room_type: '',
+    bedrooms: '',
+    beds: '',
+    bathrooms_text: '',
+    accommodates: '',
     price: '',
     amenities: [],
     images: []
@@ -71,8 +73,7 @@ const CreateListing = () => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    // In a real app, you would upload these files to a server/cloud storage
-    // For now, we'll just store the file objects
+    // Store the actual file objects to be uploaded later
     setFormData({
       ...formData,
       images: [...formData.images, ...files]
@@ -101,12 +102,15 @@ const CreateListing = () => {
   const validateForm = () => {
     const errors = {};
     
-    if (!formData.title) errors.title = 'Listing name is required';
+    if (!formData.name) errors.name = 'Listing name is required';
     if (!formData.description) errors.description = 'Description is required';
-    if (!formData.location) errors.location = 'Location is required';
-    if (!formData.rooms) errors.rooms = 'Number of rooms is required';
-    if (!formData.baths) errors.baths = 'Number of baths is required';
-    if (!formData.type) errors.type = 'Property type is required';
+    if (!formData.host_location) errors.host_location = 'Location is required';
+    if (!formData.bedrooms) errors.bedrooms = 'Number of bedrooms is required';
+    if (!formData.beds) errors.beds = 'Number of beds is required';
+    if (!formData.bathrooms_text) errors.bathrooms_text = 'Number of bathrooms is required';
+    if (!formData.property_type) errors.property_type = 'Property type is required';
+    if (!formData.room_type) errors.room_type = 'Room type is required';
+    if (!formData.accommodates) errors.accommodates = 'Number of guests is required';
     if (!formData.price) errors.price = 'Price is required';
     if (formData.images.length === 0) errors.images = 'At least one image is required';
     
@@ -129,21 +133,73 @@ const CreateListing = () => {
       // Convert form data to the format expected by the API
       const accommodationData = {
         ...formData,
-        rooms: Number(formData.rooms),
-        baths: Number(formData.baths),
+        bedrooms: Number(formData.bedrooms),
+        beds: Number(formData.beds),
+        accommodates: Number(formData.accommodates),
         price: Number(formData.price),
+        number_of_reviews: 0,
+        review_scores_rating: 0,
+        review_scores_accuracy: 0,
+        review_scores_cleanliness: 0,
+        review_scores_checkin: 0,
+        review_scores_communication: 0,
+        review_scores_location: 0,
+        review_scores_value: 0
       };
       
-      // In a real app, you would handle image uploads separately
-      // For now, we'll just pretend the images are URLs
-      accommodationData.images = formData.images.map((_, index) => 
-        `https://example.com/image${index + 1}.jpg`
-      );
+      // Create a new accommodation without images first
+      const newAccommodation = await createAccommodation(accommodationData);
       
-      await createAccommodation(accommodationData);
+      // Now handle the image uploads if there are any
+      if (formData.images.length > 0) {
+        const formDataImages = new FormData();
+        formData.images.forEach(image => {
+          formDataImages.append('images', image);
+        });
+        
+        try {
+          // Upload images to the newly created accommodation
+          const response = await fetch(`http://localhost:5001/api/accommodations/${newAccommodation._id}/upload`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: formDataImages
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to upload images');
+          }
+          
+          const imageResult = await response.json();
+          
+          // Update the accommodation with the image URLs
+          if (imageResult.imageUrls && imageResult.imageUrls.length > 0) {
+            const updateData = {
+              images: imageResult.imageUrls,
+              picture_url: imageResult.imageUrls[0]
+            };
+            
+            await fetch(`http://localhost:5001/api/accommodations/${newAccommodation._id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify(updateData)
+            });
+          }
+        } catch (imageErr) {
+          console.error('Error uploading images:', imageErr);
+          // Continue despite image upload error - we'll still have the listing
+          toast.warning('Listing created but failed to upload images properly');
+        }
+      }
+      
       toast.success('Listing created successfully!');
       navigate('/admin/view-listings');
     } catch (err) {
+      console.error('Error creating listing:', err);
       setError(err.message || 'Failed to create listing');
       toast.error('Failed to create listing');
     } finally {
@@ -157,16 +213,7 @@ const CreateListing = () => {
 
   return (
     <>
-      {/* Custom Header */}
-      <Box className="header">
-        <Typography className="logo">airbnb</Typography>
-        <Box className="user-menu">
-          <Typography>John Doe</Typography>
-          <IconButton>
-            <AccountCircleIcon />
-          </IconButton>
-        </Box>
-      </Box>
+
       
       <Container className="create-listing-container">
         {/* Page Title & Navigation */}
@@ -199,28 +246,28 @@ const CreateListing = () => {
           <Typography className="field-label">Listing Name</Typography>
           <TextField
             fullWidth
-            id="title"
-            name="title"
-            value={formData.title}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
-            error={!!validationErrors.title}
-            helperText={validationErrors.title}
+            error={!!validationErrors.name}
+            helperText={validationErrors.name}
             variant="outlined"
             size="small"
           />
         </Box>
 
-        {/* Rooms, Baths, Type Row */}
+        {/* Property Details Row */}
         <Grid container spacing={2} className="form-section">
           <Grid item xs={4}>
-            <Typography className="field-label">Rooms</Typography>
+            <Typography className="field-label">Bedrooms</Typography>
             <TextField
-              id="rooms"
-              name="rooms"
-              value={formData.rooms}
+              id="bedrooms"
+              name="bedrooms"
+              value={formData.bedrooms}
               onChange={handleChange}
-              error={!!validationErrors.rooms}
-              helperText={validationErrors.rooms}
+              error={!!validationErrors.bedrooms}
+              helperText={validationErrors.bedrooms}
               variant="outlined"
               size="small"
               fullWidth
@@ -229,14 +276,14 @@ const CreateListing = () => {
             />
           </Grid>
           <Grid item xs={4}>
-            <Typography className="field-label">Baths</Typography>
+            <Typography className="field-label">Beds</Typography>
             <TextField
-              id="baths"
-              name="baths"
-              value={formData.baths}
+              id="beds"
+              name="beds"
+              value={formData.beds}
               onChange={handleChange}
-              error={!!validationErrors.baths}
-              helperText={validationErrors.baths}
+              error={!!validationErrors.beds}
+              helperText={validationErrors.beds}
               variant="outlined"
               size="small"
               fullWidth
@@ -245,12 +292,31 @@ const CreateListing = () => {
             />
           </Grid>
           <Grid item xs={4}>
-            <Typography className="field-label">Type</Typography>
-            <FormControl fullWidth size="small" error={!!validationErrors.type}>
+            <Typography className="field-label">Bathrooms</Typography>
+            <TextField
+              id="bathrooms_text"
+              name="bathrooms_text"
+              value={formData.bathrooms_text}
+              onChange={handleChange}
+              error={!!validationErrors.bathrooms_text}
+              helperText={validationErrors.bathrooms_text}
+              variant="outlined"
+              size="small"
+              fullWidth
+              placeholder="e.g., 1.5 baths"
+            />
+          </Grid>
+        </Grid>
+        
+        {/* Property Type and Room Type Row */}
+        <Grid container spacing={2} className="form-section">
+          <Grid item xs={6}>
+            <Typography className="field-label">Property Type</Typography>
+            <FormControl fullWidth size="small" error={!!validationErrors.property_type}>
               <Select
-                id="type"
-                name="type"
-                value={formData.type}
+                id="property_type"
+                name="property_type"
+                value={formData.property_type}
                 onChange={handleChange}
                 displayEmpty
                 className="type-dropdown"
@@ -262,42 +328,74 @@ const CreateListing = () => {
                 <MenuItem value="Condo">Condo</MenuItem>
                 <MenuItem value="Villa">Villa</MenuItem>
                 <MenuItem value="Hotel">Hotel</MenuItem>
+                <MenuItem value="Guesthouse">Guesthouse</MenuItem>
+                <MenuItem value="Loft">Loft</MenuItem>
               </Select>
-              {validationErrors.type && (
+              {validationErrors.property_type && (
                 <Typography variant="caption" color="error">
-                  {validationErrors.type}
+                  {validationErrors.property_type}
+                </Typography>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography className="field-label">Room Type</Typography>
+            <FormControl fullWidth size="small" error={!!validationErrors.room_type}>
+              <Select
+                id="room_type"
+                name="room_type"
+                value={formData.room_type}
+                onChange={handleChange}
+                displayEmpty
+                className="type-dropdown"
+                IconComponent={() => <span>&#9660;</span>}
+              >
+                <MenuItem value=""><em>Select</em></MenuItem>
+                <MenuItem value="Entire home/apt">Entire home/apt</MenuItem>
+                <MenuItem value="Private room">Private room</MenuItem>
+                <MenuItem value="Shared room">Shared room</MenuItem>
+                <MenuItem value="Hotel room">Hotel room</MenuItem>
+              </Select>
+              {validationErrors.room_type && (
+                <Typography variant="caption" color="error">
+                  {validationErrors.room_type}
                 </Typography>
               )}
             </FormControl>
           </Grid>
         </Grid>
 
-        {/* Location Row */}
+        {/* Location and Guests Row */}
         <Grid container spacing={2} className="form-section">
           <Grid item xs={6}>
             <Typography className="field-label">Location</Typography>
             <TextField
               fullWidth
-              id="location"
-              name="location"
-              value={formData.location}
+              id="host_location"
+              name="host_location"
+              value={formData.host_location}
               onChange={handleChange}
-              error={!!validationErrors.location}
-              helperText={validationErrors.location}
+              error={!!validationErrors.host_location}
+              helperText={validationErrors.host_location}
               variant="outlined"
               size="small"
+              placeholder="e.g., New York, NY"
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="field-label">Location</Typography>
+            <Typography className="field-label">Accommodates (# of Guests)</Typography>
             <TextField
               fullWidth
-              id="area"
-              name="area"
-              value={formData.area}
+              id="accommodates"
+              name="accommodates"
+              value={formData.accommodates}
               onChange={handleChange}
+              error={!!validationErrors.accommodates}
+              helperText={validationErrors.accommodates}
               variant="outlined"
               size="small"
+              type="number"
+              inputProps={{ min: 1 }}
             />
           </Grid>
         </Grid>

@@ -17,12 +17,14 @@ import {
   DialogTitle,
   CircularProgress,
   Alert,
-  Container
+  Container,
+  Pagination
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { getAccommodations, deleteAccommodation } from '../../services/api';
 import { toast } from 'react-toastify';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 import './ViewListings.css';
 
@@ -32,6 +34,12 @@ const ViewListings = () => {
   const [error, setError] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [accommodationToDelete, setAccommodationToDelete] = useState(null);
+  const { formatPrice } = useCurrency();
+  
+  // Pagination states
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 20;
 
   useEffect(() => {
     fetchAccommodations();
@@ -40,62 +48,9 @@ const ViewListings = () => {
   const fetchAccommodations = async () => {
     setLoading(true);
     try {
-      // For now, we'll use mock data that matches the image
-      const mockData = [
-        {
-          _id: '1',
-          title: 'Sandton City Hotel',
-          description: '3 Room Bedroom',
-          location: 'Sandton',
-          capacity: '4-6 guests',
-          bedrooms: 3,
-          beds: 5,
-          baths: 3,
-          type: 'Entire Home',
-          amenities: ['Wifi', 'Kitchen', 'Free Parking'],
-          price: 325,
-          rating: 5.0,
-          reviews: 318,
-          images: ['https://a0.muscache.com/im/pictures/miso/Hosting-47181423/original/39c9d4e7-78d0-4807-9f0d-3029d987d02a.jpeg']
-        },
-        {
-          _id: '2',
-          title: 'Woodmead City Hotel',
-          description: 'Entire home in Bordeaux',
-          location: 'Bordeaux',
-          capacity: '4-6 guests',
-          bedrooms: 3,
-          beds: 5,
-          baths: 3,
-          type: 'Entire Home',
-          amenities: ['Wifi', 'Kitchen', 'Free Parking'],
-          price: null, // No price shown in image for this property
-          rating: 5.0,
-          reviews: 318,
-          images: ['https://a0.muscache.com/im/pictures/miso/Hosting-22916467/original/dc5fe83e-37d5-4c3e-8d69-a2e46b938be2.jpeg']
-        },
-        {
-          _id: '3',
-          title: 'Historic City Center Home',
-          description: 'Entire home in Bordeaux',
-          location: 'Bordeaux',
-          capacity: '4-6 guests',
-          bedrooms: 3,
-          beds: 5,
-          baths: 3,
-          type: 'Entire Home',
-          amenities: ['Wifi', 'Kitchen', 'Free Parking'],
-          price: 125,
-          rating: 5.0,
-          reviews: 318,
-          images: ['https://a0.muscache.com/im/pictures/miso/Hosting-52800305/original/3ae97076-6969-4191-a71a-1343c5576ac0.jpeg']
-        }
-      ];
-      
-      setAccommodations(mockData);
-      // Uncomment this when ready to use real API
-      // const data = await getAccommodations();
-      // setAccommodations(data);
+      const data = await getAccommodations();
+      setAccommodations(data);
+      setTotalPages(Math.ceil(data.length / itemsPerPage));
     } catch (err) {
       setError('Failed to load listings');
       console.error(err);
@@ -128,6 +83,18 @@ const ViewListings = () => {
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
     setAccommodationToDelete(null);
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    window.scrollTo(0, 0); // Scroll to top when changing pages
+  };
+
+  // Get current page accommodations
+  const getCurrentPageItems = () => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return accommodations.slice(startIndex, endIndex);
   };
 
   if (loading) {
@@ -166,7 +133,7 @@ const ViewListings = () => {
       
       {/* Property Listings Grid */}
       <Grid container spacing={5}>
-        {accommodations.map((accommodation) => (
+        {getCurrentPageItems().map((accommodation) => (
           <Grid item xs={12} key={accommodation._id} sx={{ mb: 2, borderBottom: '1px solid #eaeaea', pb: 5 }}>
             <Box sx={{ boxShadow: 'none', border: 'none', background: 'transparent' }}>
 
@@ -180,8 +147,13 @@ const ViewListings = () => {
                   <CardMedia
                     component="img"
                     className="listing-image"
-                    image={accommodation.images[0]}
-                    alt={accommodation.title}
+                    image={accommodation.picture_url ? accommodation.picture_url : 
+                      accommodation.images && accommodation.images.length > 0 
+                      ? accommodation.images[0].startsWith('http') 
+                        ? accommodation.images[0] 
+                        : `http://localhost:5001${accommodation.images[0]}` 
+                      : 'https://via.placeholder.com/300x200?text=No+Image'}
+                    alt={accommodation.name || accommodation.title}
                     sx={{ height: { xs: '200px', sm: '220px' }, borderRadius: '10px' }}
                   />
                   
@@ -225,12 +197,12 @@ const ViewListings = () => {
                     
                     {/* Hotel name as title */}
                     <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-                      {accommodation.title}
+                      {accommodation.name || accommodation.title}
                     </Typography>
                     
                     {/* Guest and amenities info */}
                     <Typography variant="body2" sx={{ mb: 0.5 }}>
-                      {accommodation.capacity} · {accommodation.type} · {accommodation.beds} beds · {accommodation.baths} bath
+                      {accommodation.accommodates || accommodation.maxGuests} guests · {accommodation.bedrooms} bedrooms · {accommodation.bathrooms_text || accommodation.bathrooms + ' bath'}
                     </Typography>
                     
                     <Typography variant="body2" sx={{ mb: 2 }}>
@@ -243,23 +215,27 @@ const ViewListings = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>
-                          {accommodation.rating}
+                          {accommodation.review_scores_rating || accommodation.rating || 'New'}
                         </Typography>
-                        <Rating
-                          value={1}
-                          max={1}
-                          readOnly
-                          icon={<StarIcon fontSize="inherit" color="warning" />}
-                          emptyIcon={<StarBorderIcon fontSize="inherit" />}
-                        />
-                        <Typography variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
-                          ({accommodation.reviews} reviews)
-                        </Typography>
+                        {(accommodation.review_scores_rating > 0 || accommodation.rating > 0) && (
+                          <>
+                            <Rating
+                              value={1}
+                              max={1}
+                              readOnly
+                              icon={<StarIcon fontSize="inherit" color="warning" />}
+                              emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                            />
+                            <Typography variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
+                              ({accommodation.number_of_reviews || accommodation.reviews || 0} reviews)
+                            </Typography>
+                          </>
+                        )}
                       </Box>
                       
                       {accommodation.price && (
                         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                          ${accommodation.price} <Typography component="span" variant="body2">/night</Typography>
+                          {formatPrice(accommodation.price)} <Typography component="span" variant="body2">/night</Typography>
                         </Typography>
                       )}
                     </Box>
@@ -270,6 +246,21 @@ const ViewListings = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}>
+          <Pagination 
+            count={totalPages} 
+            page={page} 
+            onChange={handlePageChange} 
+            color="primary" 
+            size="large"
+            siblingCount={1}
+            boundaryCount={1}
+          />
+        </Box>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <Dialog
@@ -283,7 +274,7 @@ const ViewListings = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the listing "{accommodationToDelete?.title}"? This action cannot be undone.
+            Are you sure you want to delete the listing "{accommodationToDelete?.name || accommodationToDelete?.title}"? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

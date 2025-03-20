@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -17,10 +17,17 @@ import {
   CircularProgress,
   Alert,
   FormControlLabel,
-  Switch
+  Switch,
+  IconButton,
+  Container
 } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { getAccommodation, updateAccommodation } from '../../services/api';
 import { toast } from 'react-toastify';
+import { useCurrency } from '../../../context/CurrencyContext';
+import './UpdateListing.css';
 
 // Amenities options
 const amenitiesOptions = [
@@ -48,26 +55,28 @@ const UpdateListing = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const { currency } = useCurrency();
   const [formData, setFormData] = useState({
-    title: '',
+    name: '',
     description: '',
-    location: '',
+    host_location: '',
     price: '',
     bedrooms: '',
-    bathrooms: '',
-    guests: '',
-    type: '',
+    beds: '',
+    bathrooms_text: '',
+    accommodates: '',
+    property_type: '',
+    room_type: '',
     amenities: [],
     images: [],
-    weeklyDiscount: '',
-    cleaningFee: '',
-    serviceFee: '',
-    occupancyTaxes: '',
+    number_of_reviews: 0,
+    review_scores_rating: 0,
     isActive: true
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [originalImages, setOriginalImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [newAmenity, setNewAmenity] = useState('');
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -130,19 +139,19 @@ const UpdateListing = () => {
         
         // Format the data for the form
         setFormData({
-          title: listing.title || '',
+          name: listing.title || '', // Using title field from mock data for name
           description: listing.description || '',
-          location: listing.location || '',
+          host_location: listing.location || '', // Using location field from mock data for host_location
           price: listing.price || '',
           bedrooms: listing.bedrooms || '',
-          bathrooms: listing.baths || '',
-          guests: listing.capacity || '',
-          type: listing.type || '',
+          beds: listing.beds || '',
+          bathrooms_text: listing.baths ? `${listing.baths} baths` : '', // Convert numeric baths to text format
+          accommodates: listing.capacity ? listing.capacity.split('-')[1].split(' ')[0] : '', // Extract max guests from capacity
+          property_type: listing.type || '',
+          room_type: listing.type === 'Entire Home' ? 'Entire home/apt' : 'Private room', // Convert type to room_type
           amenities: listing.amenities || [],
-          weeklyDiscount: '', // Not available in mock data
-          cleaningFee: '', // Not available in mock data
-          serviceFee: '', // Not available in mock data
-          occupancyTaxes: '', // Not available in mock data
+          number_of_reviews: listing.reviews || 0,
+          review_scores_rating: listing.rating ? listing.rating * 20 : 0, // Convert 5-star rating to 100-point scale
           isActive: true
         });
         
@@ -172,6 +181,20 @@ const UpdateListing = () => {
         ...validationErrors,
         [name]: ''
       });
+    }
+  };
+
+  const handleAmenityChange = (e) => {
+    setNewAmenity(e.target.value);
+  };
+
+  const addAmenity = () => {
+    if (newAmenity.trim() !== '') {
+      setFormData({
+        ...formData,
+        amenities: [...formData.amenities, newAmenity.trim()]
+      });
+      setNewAmenity('');
     }
   };
 
@@ -205,9 +228,9 @@ const UpdateListing = () => {
   const validateForm = () => {
     const errors = {};
     
-    if (!formData.title) errors.title = 'Title is required';
+    if (!formData.name) errors.name = 'Listing name is required';
     if (!formData.description) errors.description = 'Description is required';
-    if (!formData.location) errors.location = 'Location is required';
+    if (!formData.host_location) errors.host_location = 'Location is required';
     
     if (!formData.price) {
       errors.price = 'Price is required';
@@ -221,19 +244,24 @@ const UpdateListing = () => {
       errors.bedrooms = 'Bedrooms must be a positive number';
     }
     
-    if (!formData.bathrooms) {
-      errors.bathrooms = 'Number of bathrooms is required';
-    } else if (isNaN(formData.bathrooms) || Number(formData.bathrooms) <= 0) {
-      errors.bathrooms = 'Bathrooms must be a positive number';
+    if (!formData.beds) {
+      errors.beds = 'Number of beds is required';
+    } else if (isNaN(formData.beds) || Number(formData.beds) <= 0) {
+      errors.beds = 'Beds must be a positive number';
     }
     
-    if (!formData.guests) {
-      errors.guests = 'Number of guests is required';
-    } else if (isNaN(formData.guests) || Number(formData.guests) <= 0) {
-      errors.guests = 'Guests must be a positive number';
+    if (!formData.bathrooms_text) {
+      errors.bathrooms_text = 'Bathrooms information is required';
     }
     
-    if (!formData.type) errors.type = 'Property type is required';
+    if (!formData.accommodates) {
+      errors.accommodates = 'Number of guests is required';
+    } else if (isNaN(formData.accommodates) || Number(formData.accommodates) <= 0) {
+      errors.accommodates = 'Accommodates must be a positive number';
+    }
+    
+    if (!formData.property_type) errors.property_type = 'Property type is required';
+    if (!formData.room_type) errors.room_type = 'Room type is required';
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -256,16 +284,18 @@ const UpdateListing = () => {
         ...formData,
         price: Number(formData.price),
         bedrooms: Number(formData.bedrooms),
-        bathrooms: Number(formData.bathrooms),
-        guests: Number(formData.guests),
-        weeklyDiscount: formData.weeklyDiscount ? Number(formData.weeklyDiscount) : undefined,
-        cleaningFee: formData.cleaningFee ? Number(formData.cleaningFee) : undefined,
-        serviceFee: formData.serviceFee ? Number(formData.serviceFee) : undefined,
-        occupancyTaxes: formData.occupancyTaxes ? Number(formData.occupancyTaxes) : undefined
+        beds: Number(formData.beds),
+        accommodates: Number(formData.accommodates),
+        number_of_reviews: Number(formData.number_of_reviews || 0),
+        review_scores_rating: Number(formData.review_scores_rating || 0),
+        review_scores_accuracy: Number(formData.review_scores_accuracy || 0),
+        review_scores_cleanliness: Number(formData.review_scores_cleanliness || 0),
+        review_scores_checkin: Number(formData.review_scores_checkin || 0),
+        review_scores_communication: Number(formData.review_scores_communication || 0),
+        review_scores_location: Number(formData.review_scores_location || 0),
+        review_scores_value: Number(formData.review_scores_value || 0)
       };
       
-      // In a real app, you would handle image uploads separately
-      // For now, we'll just combine original and new images
       accommodationData.images = [
         ...originalImages,
         ...newImages.map((_, index) => `https://example.com/new-image${index + 1}.jpg`)
@@ -291,215 +321,201 @@ const UpdateListing = () => {
   }
 
   return (
-    <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Update Listing
-      </Typography>
-      
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
-      
-      <Paper sx={{ p: 3 }}>
+    <>
+      <Container className="update-listing-container">
+        {/* Page Title & Navigation */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+          <Button 
+            variant="outlined" 
+            component={RouterLink} 
+            to="/admin/view-listings"
+            className="view-listings-btn"
+          >
+            View my listings
+          </Button>
+        </Box>
+
+        <Typography className="update-listing-title">
+          Update Listing
+        </Typography>
+        
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Form */}
         <Box component="form" onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={3}>
-            {/* Basic Information */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Basic Information
-              </Typography>
-            </Grid>
-            
-            <Grid item xs={12} sm={9}>
+          {/* Listing Name */}
+          <Box className="form-section">
+            <Typography className="field-label">Listing Name</Typography>
+            <TextField
+              fullWidth
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              error={!!validationErrors.name}
+              helperText={validationErrors.name}
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+
+          {/* Rooms, Baths, Type Row */}
+          <Grid container spacing={2} className="form-section">
+            <Grid item xs={4}>
+              <Typography className="field-label">Rooms</Typography>
               <TextField
-                required
-                fullWidth
-                id="title"
-                name="title"
-                label="Title"
-                value={formData.title}
-                onChange={handleChange}
-                error={!!validationErrors.title}
-                helperText={validationErrors.title}
-              />
-            </Grid>
-            
-            <Grid item xs={12} sm={3}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={formData.isActive}
-                    onChange={handleChange}
-                    name="isActive"
-                    color="primary"
-                  />
-                }
-                label="Active Listing"
-              />
-            </Grid>
-            
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="description"
-                name="description"
-                label="Description"
-                multiline
-                rows={4}
-                value={formData.description}
-                onChange={handleChange}
-                error={!!validationErrors.description}
-                helperText={validationErrors.description}
-              />
-            </Grid>
-            
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="location"
-                name="location"
-                label="Location"
-                value={formData.location}
-                onChange={handleChange}
-                error={!!validationErrors.location}
-                helperText={validationErrors.location}
-              />
-            </Grid>
-            
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth required error={!!validationErrors.type}>
-                <InputLabel id="type-label">Property Type</InputLabel>
-                <Select
-                  labelId="type-label"
-                  id="type"
-                  name="type"
-                  value={formData.type}
-                  label="Property Type"
-                  onChange={handleChange}
-                >
-                  <MenuItem value="House">House</MenuItem>
-                  <MenuItem value="Apartment">Apartment</MenuItem>
-                  <MenuItem value="Condo">Condo</MenuItem>
-                  <MenuItem value="Villa">Villa</MenuItem>
-                  <MenuItem value="Cabin">Cabin</MenuItem>
-                  <MenuItem value="Cottage">Cottage</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-                {validationErrors.type && (
-                  <Typography variant="caption" color="error">
-                    {validationErrors.type}
-                  </Typography>
-                )}
-              </FormControl>
-            </Grid>
-            
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="price"
-                name="price"
-                label="Price per Night"
-                type="number"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                }}
-                value={formData.price}
-                onChange={handleChange}
-                error={!!validationErrors.price}
-                helperText={validationErrors.price}
-              />
-            </Grid>
-            
-            {/* Property Details */}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography variant="h6" gutterBottom>
-                Property Details
-              </Typography>
-            </Grid>
-            
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                fullWidth
                 id="bedrooms"
                 name="bedrooms"
-                label="Bedrooms"
-                type="number"
                 value={formData.bedrooms}
                 onChange={handleChange}
                 error={!!validationErrors.bedrooms}
                 helperText={validationErrors.bedrooms}
-              />
-            </Grid>
-            
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
+                variant="outlined"
+                size="small"
                 fullWidth
-                id="bathrooms"
-                name="bathrooms"
-                label="Bathrooms"
                 type="number"
-                value={formData.bathrooms}
-                onChange={handleChange}
-                error={!!validationErrors.bathrooms}
-                helperText={validationErrors.bathrooms}
+                inputProps={{ min: 1 }}
               />
             </Grid>
-            
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={4}>
+              <Typography className="field-label">Baths</Typography>
               <TextField
-                required
-                fullWidth
-                id="guests"
-                name="guests"
-                label="Max Guests"
-                type="number"
-                value={formData.guests}
+                id="bathrooms_text"
+                name="bathrooms_text"
+                value={formData.bathrooms_text}
                 onChange={handleChange}
-                error={!!validationErrors.guests}
-                helperText={validationErrors.guests}
+                error={!!validationErrors.bathrooms_text}
+                helperText={validationErrors.bathrooms_text}
+                variant="outlined"
+                size="small"
+                fullWidth
               />
             </Grid>
-            
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="amenities-label">Amenities</InputLabel>
+            <Grid item xs={4}>
+              <Typography className="field-label">Type</Typography>
+              <FormControl fullWidth size="small" error={!!validationErrors.property_type}>
                 <Select
-                  labelId="amenities-label"
-                  id="amenities"
-                  multiple
-                  value={formData.amenities}
-                  onChange={handleAmenitiesChange}
-                  input={<OutlinedInput id="select-multiple-chip" label="Amenities" />}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} />
-                      ))}
-                    </Box>
-                  )}
+                  id="property_type"
+                  name="property_type"
+                  value={formData.property_type}
+                  onChange={handleChange}
+                  displayEmpty
+                  className="type-dropdown"
+                  IconComponent={() => <span>&#9660;</span>}
                 >
-                  {amenitiesOptions.map((amenity) => (
-                    <MenuItem key={amenity} value={amenity}>
-                      {amenity}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value=""><em>Select</em></MenuItem>
+                  <MenuItem value="House">House</MenuItem>
+                  <MenuItem value="Apartment">Apartment</MenuItem>
+                  <MenuItem value="Condo">Condo</MenuItem>
+                  <MenuItem value="Villa">Villa</MenuItem>
+                  <MenuItem value="Hotel">Hotel</MenuItem>
+                  <MenuItem value="Guesthouse">Guesthouse</MenuItem>
+                  <MenuItem value="Loft">Loft</MenuItem>
                 </Select>
+                {validationErrors.property_type && (
+                  <Typography variant="caption" color="error">
+                    {validationErrors.property_type}
+                  </Typography>
+                )}
               </FormControl>
             </Grid>
-            
-            {/* Additional Fees */}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography variant="h6" gutterBottom>
-                Additional Fees
-              </Typography>
+          </Grid>
+          
+          {/* Location */}
+          <Grid container spacing={2} className="form-section">
+            <Grid item xs={12}>
+              <Typography className="field-label">Location</Typography>
+              <TextField
+                fullWidth
+                id="host_location"
+                name="host_location"
+                value={formData.host_location}
+                onChange={handleChange}
+                error={!!validationErrors.host_location}
+                helperText={validationErrors.host_location}
+                variant="outlined"
+                size="small"
+              />
             </Grid>
+          </Grid>
+
+          {/* Description */}
+          <Box className="form-section">
+            <Typography className="field-label">Description</Typography>
+            <TextField
+              fullWidth
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              error={!!validationErrors.description}
+              helperText={validationErrors.description}
+              variant="outlined"
+              multiline
+              rows={4}
+            />
+          </Box>
+
+          {/* Amenities */}
+          <Box className="form-section">
+            <Typography className="field-label">Amenities</Typography>
+            <div className="amenities-container">
+              <TextField
+                id="newAmenity"
+                value={newAmenity}
+                onChange={handleAmenityChange}
+                variant="outlined"
+                size="small"
+                fullWidth
+                placeholder="Add amenity"
+              />
+              <Button 
+                onClick={addAmenity} 
+                variant="contained" 
+                className="add-amenity-btn"
+              >
+                Add
+              </Button>
+            </div>
+            <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {formData.amenities.map((amenity, index) => (
+                <Chip
+                  key={index}
+                  label={amenity}
+                  onDelete={() => {
+                    const newAmenities = [...formData.amenities];
+                    newAmenities.splice(index, 1);
+                    setFormData({ ...formData, amenities: newAmenities });
+                  }}
+                />
+              ))}
+            </Box>
+          </Box>
+            
+          {/* Price */}
+          <Box className="form-section">
+            <Typography className="field-label">Price</Typography>
+            <TextField
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              error={!!validationErrors.price}
+              helperText={validationErrors.price}
+              variant="outlined"
+              size="small"
+              fullWidth
+              type="number"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }}
+            />
+          </Box>
             
             <Grid item xs={12} sm={6} md={3}>
               <TextField
@@ -568,138 +584,92 @@ const UpdateListing = () => {
               </Typography>
             </Grid>
             
-            <Grid item xs={12}>
-              <Typography variant="subtitle2" gutterBottom>
-                Current Images
-              </Typography>
-              
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                {originalImages.length > 0 ? (
-                  originalImages.map((image, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        position: 'relative',
-                        width: 100,
-                        height: 100,
-                        border: '1px solid #ccc',
-                        borderRadius: 1,
-                        overflow: 'hidden'
-                      }}
-                    >
-                      <img
-                        src={image}
-                        alt={`Listing ${index}`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                      <Button
-                        size="small"
-                        color="error"
-                        variant="contained"
-                        sx={{
-                          position: 'absolute',
-                          top: 0,
-                          right: 0,
-                          minWidth: 'auto',
-                          width: 20,
-                          height: 20,
-                          p: 0
-                        }}
-                        onClick={() => removeOriginalImage(index)}
-                      >
-                        ×
-                      </Button>
-                    </Box>
-                  ))
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    No images available
-                  </Typography>
-                )}
-              </Box>
-              
-              <Typography variant="subtitle2" gutterBottom>
-                Add New Images
-              </Typography>
-              
-              <Button
-                variant="outlined"
-                component="label"
-                sx={{ mb: 2 }}
-              >
-                Upload Images
-                <input
-                  type="file"
-                  hidden
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-              </Button>
-              
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                {newImages.map((image, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      position: 'relative',
-                      width: 100,
-                      height: 100,
-                      border: '1px solid #ccc',
-                      borderRadius: 1,
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`New ${index}`}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                    <Button
-                      size="small"
-                      color="error"
-                      variant="contained"
-                      sx={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        minWidth: 'auto',
-                        width: 20,
-                        height: 20,
-                        p: 0
-                      }}
-                      onClick={() => removeNewImage(index)}
-                    >
-                      ×
-                    </Button>
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
+          {/* Images Section */}
+          <Box className="form-section">
+            <Typography className="field-label">Images</Typography>
             
-            {/* Submit Button */}
-            <Grid item xs={12} sx={{ mt: 3 }}>
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                disabled={submitting}
-                sx={{ mr: 2 }}
-              >
-                {submitting ? <CircularProgress size={24} /> : 'Update Listing'}
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => navigate('/admin/view-listings')}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
+            <Box className="images-container">
+              {/* Current Images */}
+              {originalImages.length > 0 && originalImages.map((image, index) => (
+                <Box
+                  key={`original-${index}`}
+                  className="image-box"
+                >
+                  <img
+                    src={image}
+                    alt={`Listing ${index}`}
+                    className="listing-image"
+                  />
+                  <Button
+                    className="delete-btn"
+                    onClick={() => removeOriginalImage(index)}
+                  >
+                    ×
+                  </Button>
+                </Box>
+              ))}
+              
+              {/* New Images */}
+              {newImages.map((image, index) => (
+                <Box
+                  key={`new-${index}`}
+                  className="image-box"
+                >
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`New ${index}`}
+                    className="listing-image"
+                  />
+                  <Button
+                    className="delete-btn"
+                    onClick={() => removeNewImage(index)}
+                  >
+                    ×
+                  </Button>
+                </Box>
+              ))}
+              
+              {/* Upload Button */}
+              <Box className="upload-box">
+                <Button
+                  component="label"
+                  className="upload-btn"
+                >
+                  <AddIcon />
+                  <input
+                    type="file"
+                    hidden
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+          
+          {/* Submit Button */}
+          <Box className="buttons-container">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={submitting}
+              className="update-btn"
+            >
+              {submitting ? <CircularProgress size={24} /> : 'Update Listing'}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/admin/view-listings')}
+              className="cancel-btn"
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
-      </Paper>
-    </Box>
+      </Container>
+    </>
   );
 };
 

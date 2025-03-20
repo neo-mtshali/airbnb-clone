@@ -3,10 +3,12 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import SearchHeader from '../components/SearchHeader';
 import './Search.css';
 import { accommodationApi } from '../services/api';
+import { useCurrency } from '../context/CurrencyContext';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const [searchCriteria, setSearchCriteria] = useState({
     location: '',
     checkIn: '',
@@ -30,6 +32,9 @@ const Search = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = 20;
   const [filters, setFilters] = useState({
     price: false,
     typeOfPlace: false,
@@ -46,86 +51,117 @@ const Search = () => {
   
   const [likedListings, setLikedListings] = useState({});
 
-  const fetchListings = async (criteria = {}) => {
+  const fetchListings = async (criteria = {}, page = 1) => {
     try {
       setLoading(true);
-      
-      // Get all listings first (we'll filter client-side)
-      const response = await accommodationApi.getAllAccommodations();
-      let filteredListings = response.data;
-      
-      // Apply client-side filtering for location
-      if (criteria.location && criteria.location.trim() !== '') {
-        const searchLocation = criteria.location.toLowerCase().trim();
-        filteredListings = filteredListings.filter(listing => 
-          listing.location && listing.location.toLowerCase().includes(searchLocation)
-        );
-      }
-      
-      // Apply other filters here if needed (dates, guests, etc.)
-      if (criteria.guests?.adults > 0) {
-        const totalGuests = criteria.guests.adults + (criteria.guests.children || 0);
-        filteredListings = filteredListings.filter(listing => 
-          listing.maxGuests >= totalGuests
-        );
-      }
-      
-      setListings(filteredListings);
       setError(null);
+      
+      console.log('Fetching listings with criteria:', criteria);
+      
+      // Build search parameters for the optimized backend endpoint
+      const params = {};
+      
+      // Add location search parameter
+      if (criteria.location && criteria.location.trim() !== '') {
+        params.location = criteria.location.trim();
+      }
+      
+      // Add guest count if available
+      if (criteria.guests?.adults > 0) {
+        params.guests = criteria.guests.adults + (criteria.guests.children || 0);
+      }
+      
+      // Add dates if available
+      if (criteria.checkIn) params.checkIn = criteria.checkIn;
+      if (criteria.checkOut) params.checkOut = criteria.checkOut;
+      
+      // Add pagination parameters
+      params.page = page;
+      params.limit = ITEMS_PER_PAGE; // Show 20 items per page
+      
+      // Add amenity filters
+      const selectedAmenities = [];
+      if (filters.wifi) selectedAmenities.push('wifi', 'wi-fi');
+      if (filters.kitchen) selectedAmenities.push('kitchen');
+      if (filters.freeParking) selectedAmenities.push('free parking');
+      if (filters.airConditioning) selectedAmenities.push('air conditioning', 'air-conditioning', 'ac');
+      if (filters.washer) selectedAmenities.push('washer');
+      if (filters.iron) selectedAmenities.push('iron');
+      if (filters.dedicatedWorkspace) selectedAmenities.push('workspace', 'desk');
+      if (filters.dryer) selectedAmenities.push('dryer');
+      
+      // Add amenities to params if any are selected
+      if (selectedAmenities.length > 0) {
+        params.amenities = selectedAmenities.join(',');
+      }
+      
+      // Make the API call using the optimized search endpoint
+      let response;
+      if (Object.keys(params).length > 0) {
+        console.log('Using optimized search endpoint with params:', params);
+        response = await accommodationApi.searchAccommodations(params);
+      } else {
+        // Get all listings if no specific search criteria
+        response = await accommodationApi.getAllAccommodations();
+      }
+      
+      console.log('API response:', response);
+      
+      // Handle the response format from our new optimized endpoint
+      let listings;
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
+        // Using the new optimized endpoint which returns { data, pagination }
+        listings = response.data.data;
+        
+        // Extract pagination information
+        if (response.data.pagination) {
+          // Backend returns 'pages' for total pages
+          setTotalPages(response.data.pagination.pages || 1);
+          console.log('Pagination info:', response.data.pagination);
+        } else {
+          // If no pagination info, calculate based on total count and limit
+          const totalItems = response.data.total || listings.length;
+          setTotalPages(Math.ceil(totalItems / ITEMS_PER_PAGE));
+        }
+      } else if (response.data && Array.isArray(response.data)) {
+        // Fallback to the old format for backward compatibility
+        listings = response.data;
+        // For old format, estimate pagination
+        setTotalPages(Math.ceil(listings.length / ITEMS_PER_PAGE));
+      } else {
+        throw new Error('Invalid response format from API');
+      }
+      
+      console.log('Fetched listings:', listings);
+      setListings(listings);
     } catch (err) {
       console.error('Error fetching listings:', err);
       setError('Failed to fetch listings. Please try again later.');
-      // Fallback to mock data if API fails
-      const mockListings = [
-        {
-          _id: '1',
-          title: "New York City Loft",
-          location: "New York",
-          bedrooms: 2,
-          bathrooms: 1,
-          maxGuests: 4,
-          amenities: ["WiFi", "Kitchen", "Free Parking"],
-          price: 250,
-          images: ["https://via.placeholder.com/400x300"],
-        },
-        {
-          _id: '2',
-          title: "Manhattan Penthouse",
-          location: "New York",
-          bedrooms: 3,
-          bathrooms: 2,
-          maxGuests: 6,
-          amenities: ["WiFi", "Kitchen", "Free Parking"],
-          price: 350,
-          images: ["https://via.placeholder.com/400x300"],
-        }
-      ];
-      
-      // Filter mock data too if location is provided
-      if (criteria.location && criteria.location.trim() !== '') {
-        const searchLocation = criteria.location.toLowerCase().trim();
-        const filteredMockListings = mockListings.filter(listing => 
-          listing.location.toLowerCase().includes(searchLocation)
-        );
-        setListings(filteredMockListings);
-      } else {
-        setListings(mockListings);
-      }
+      // Fallback to empty array instead of mock data for better clarity
+      setListings([]);
     } finally {
       setLoading(false);
     }
   };
   
-  // Fetch listings when search criteria changes
+  // Fetch listings when search criteria or page changes
   useEffect(() => {
-    fetchListings(searchCriteria);
-  }, [searchCriteria]);
+    fetchListings(searchCriteria, currentPage);
+  }, [searchCriteria, currentPage]);
+  
+  // Reset to page 1 when search criteria or filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchCriteria.location, searchCriteria.checkIn, searchCriteria.checkOut, JSON.stringify(searchCriteria.guests), JSON.stringify(filters)]);
 
   const toggleFilter = (filter) => {
     setFilters(prev => ({
       ...prev,
       [filter]: !prev[filter]
     }));
+    
+    // When filters change, we need to fetch listings again
+    fetchListings(searchCriteria, 1);
   };
 
   return (
@@ -184,20 +220,34 @@ const Search = () => {
         {error && <div className="error-message">{error}</div>}
         
         <div className="listings-grid">
+          {listings.length === 0 && !loading && (
+            <div className="no-results">
+              <h3>No listings found</h3>
+              <p>Try adjusting your search criteria or filters</p>
+            </div>
+          )}
           {listings.map(listing => (
             <div key={listing._id} className="listing-card" onClick={() => navigate(`/listing/${listing._id}`)}>
               <div className="listing-content">
                 <div className="listing-img">
                   <img 
-                    src={listing.images && listing.images.length > 0 ? listing.images[0] : 'https://via.placeholder.com/400x300'} 
-                    alt={listing.title} 
+                    src={listing.picture_url ? 
+                      (listing.picture_url.startsWith('http') ? listing.picture_url : `http://localhost:5001${listing.picture_url}`) 
+                      : (listing.images && listing.images.length > 0 ? 
+                        (listing.images[0].startsWith('http') ? listing.images[0] : `http://localhost:5001${listing.images[0]}`) 
+                        : 'https://via.placeholder.com/400x300')} 
+                    alt={listing.name} 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://via.placeholder.com/400x300';
+                    }}
                   />
                 </div>
                 <button 
                   className="favorite-btn" 
                   onClick={(e) => {
                     e.stopPropagation();
-                    setLikedListings(prev => ({
+                    setLikedListings(prev => ({  
                       ...prev,
                       [listing._id]: !prev[listing._id]
                     }));
@@ -215,24 +265,23 @@ const Search = () => {
                 </button>
                 <div className="listing-info">
                   <div className="listing-title">
-                    <h3>{`Entire home in ${listing.location}`}</h3>
-                    <h2>{listing.title}</h2>
+                    <h3>{`${listing.room_type || 'Entire home'} in ${listing.host_location}`}</h3>
+                    <h2>{listing.name}</h2>
                   </div>
                   <p className="listing-specs">
-                    {`${listing.maxGuests}-${listing.maxGuests+2} guests · Entire Home · ${listing.bedrooms} beds · ${listing.bathrooms} bath`}
+                    {`${listing.accommodates} guests · ${listing.bedrooms} bedrooms · ${listing.bathrooms_text}`}
                   </p>
                   <p className="listing-amenities">
                     {listing.amenities ? listing.amenities.slice(0, 3).join(' · ') : 'Wifi · Kitchen · Free Parking'}
                   </p>
                   <div className="listing-footer">
                     <div className="rating">
-                      <span className="rating-value">5.0</span>
+                      <span className="rating-value">{listing.review_scores_rating ? listing.review_scores_rating.toFixed(1) : '0.0'}</span>
                       <span className="star"><i className="fas fa-star"></i></span>
-                      <span className="reviews">(318 reviews)</span>
+                      <span className="reviews">({listing.number_of_reviews || 0} review{listing.number_of_reviews !== 1 ? 's' : ''})</span>
                     </div>
                     <div className="price">
-                      <span className="amount">${listing.price}</span>
-                      <span className="per-night">/night</span>
+                      <span className="amount">{formatPrice(typeof listing.price === 'string' ? parseFloat(listing.price.replace(/[^0-9.]/g, '')) : listing.price)}</span><span className="per-night">/night</span>
                     </div>
                   </div>
                 </div>
@@ -240,6 +289,53 @@ const Search = () => {
             </div>
           ))}
         </div>
+        
+        {/* Pagination Controls */}
+        {!loading && listings.length > 0 && (
+          <div className="pagination-controls">
+            <div className="page-numbers">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(pageNum => {
+                  // Show first page, last page, current page and 1 page before/after current
+                  return pageNum === 1 || 
+                         pageNum === totalPages || 
+                         (pageNum >= currentPage - 1 && pageNum <= currentPage + 1);
+                })
+                .map((pageNum, index, array) => {
+                  // Add ellipsis between non-consecutive page numbers
+                  const showEllipsisBefore = index > 0 && array[index - 1] !== pageNum - 1;
+                  return (
+                    <React.Fragment key={pageNum}>
+                      {showEllipsisBefore && <span className="page-ellipsis">...</span>}
+                      <button 
+                        className={`page-number ${currentPage === pageNum ? 'active' : ''}`}
+                        onClick={() => setCurrentPage(pageNum)}
+                      >
+                        {pageNum}
+                      </button>
+                    </React.Fragment>
+                  );
+                })
+              }
+            </div>
+            <div className="page-navigation">
+              <button 
+                className="prev-page" 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <i className="fas fa-chevron-left"></i> Previous
+              </button>
+              <button 
+                className="next-page" 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                Next <i className="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

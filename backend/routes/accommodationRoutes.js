@@ -8,11 +8,15 @@ const {
   createAccommodation,
   updateAccommodation,
   deleteAccommodation,
-  uploadImages
+  uploadImages,
+  getListingStatistics,
+  searchAccommodations
 } = require('../controllers/accommodationController');
 
 // Public routes
 router.get('/', getAllAccommodations);
+router.get('/search', searchAccommodations);
+router.get('/statistics', getListingStatistics);
 router.get('/:id', getAccommodationById);
 
 // Protected routes (require authentication)

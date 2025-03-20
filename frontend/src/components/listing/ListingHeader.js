@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ListingHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faBars, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faBars, faGlobe, faUserCircle, faUser, faBookmark, faCog, faSignOutAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 const ListingHeader = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setIsDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <header className="listing-header">
       <div className="header-container">
@@ -32,15 +65,74 @@ const ListingHeader = () => {
           <button className="language-button">
             <FontAwesomeIcon icon={faGlobe} />
           </button>
-          <div className="profile-menu">
-            <button className="profile-button">
+          <div className="profile-menu" ref={dropdownRef}>
+            <button className="profile-button" onClick={toggleDropdown}>
               <FontAwesomeIcon icon={faBars} className="menu-icon" />
               <div className="user-avatar">
-                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style={{display: 'block', height: '100%', width: '100%', fill: 'currentcolor'}}>
-                  <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z"></path>
-                </svg>
+                <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
               </div>
             </button>
+            {isDropdownOpen && (
+              <div className="profile-dropdown">
+                {isLoggedIn ? (
+                  /* Logged in user dropdown */
+                  <>
+                    <div className="dropdown-section">
+                      <Link to="/profile" className="dropdown-item">
+                        <FontAwesomeIcon icon={faUser} className="dropdown-icon" />
+                        <span>Profile</span>
+                      </Link>
+                      <Link to="/trips" className="dropdown-item">
+                        <FontAwesomeIcon icon={faBookmark} className="dropdown-icon" />
+                        <span>Trips</span>
+                      </Link>
+                      <Link to="/settings" className="dropdown-item">
+                        <FontAwesomeIcon icon={faCog} className="dropdown-icon" />
+                        <span>Settings</span>
+                      </Link>
+                    </div>
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-section">
+                      <Link to="/host/homes" className="dropdown-item">
+                        <span>Host your home</span>
+                      </Link>
+                      <Link to="/host/experiences" className="dropdown-item">
+                        <span>Host an experience</span>
+                      </Link>
+                    </div>
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-section">
+                      <Link to="/help" className="dropdown-item">
+                        <span>Help</span>
+                      </Link>
+                      <button onClick={handleLogout} className="dropdown-item logout-button">
+                        <FontAwesomeIcon icon={faSignOutAlt} className="dropdown-icon" />
+                        <span>Log out</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  /* Not logged in user dropdown */
+                  <div className="dropdown-section">
+                    <Link to="/login" className="dropdown-item">
+                      <FontAwesomeIcon icon={faUser} className="dropdown-icon" />
+                      <span>Log in</span>
+                    </Link>
+                    <Link to="/signup" className="dropdown-item">
+                      <FontAwesomeIcon icon={faUserPlus} className="dropdown-icon" />
+                      <span>Sign up</span>
+                    </Link>
+                    <div className="dropdown-divider"></div>
+                    <Link to="/host/homes" className="dropdown-item">
+                      <span>Host your home</span>
+                    </Link>
+                    <Link to="/help" className="dropdown-item">
+                      <span>Help</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

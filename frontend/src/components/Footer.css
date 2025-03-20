@@ -81,11 +81,78 @@
     gap: 15px;
   }
   
-  .footer-language,
+  .footer-language {
+    font-size: 14px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  /* Currency Switcher Styles */
+  .footer-currency-container {
+    position: relative;
+  }
+  
   .footer-currency {
     font-size: 14px;
     cursor: pointer;
     color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .footer-currency:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  .currency-dropdown {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    padding: 8px 0;
+    margin-bottom: 8px;
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .currency-option {
+    display: grid;
+    grid-template-columns: 30px 50px 1fr;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .currency-option:hover {
+    background-color: #f7f7f7;
+  }
+  
+  .currency-option.active {
+    background-color: #f7f7f7;
+    font-weight: 500;
+  }
+  
+  .currency-symbol {
+    font-weight: 500;
+  }
+  
+  .currency-code {
+    font-weight: 500;
+  }
+  
+  .currency-name {
+    color: #717171;
+    font-size: 14px;
   }
   
   .footer-socials a {

@@ -134,22 +134,6 @@
   min-width: 60px !important;
 }
 
-/* Custom header with logo */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #dddddd;
-  margin-bottom: 20px;
-}
-
-.logo {
-  color: #ff385c;
-  font-weight: 700;
-  font-size: 24px;
-}
-
 .user-menu {
   display: flex;
   align-items: center;

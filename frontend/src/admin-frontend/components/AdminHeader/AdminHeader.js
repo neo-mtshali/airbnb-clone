@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import airbnbLogo from "../../../assets/airbnb-logo.svg";
 import "./AdminHeader.css";
 
 function AdminHeader() {
@@ -15,7 +16,7 @@ function AdminHeader() {
         {/* Left: Airbnb Logo */}
         <div className="logo-container">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Airbnb_logo.svg/200px-Airbnb_logo.svg.png"
+            src={airbnbLogo}
             alt="Airbnb"
             className="airbnb-logo"
           />

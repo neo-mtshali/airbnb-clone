@@ -76,3 +76,12 @@ exports.getMe = async (req, res) => {
     res.status(400).json({ message: 'Error fetching user data' });
   }
 };
+
+// Test connection endpoint
+exports.testConnection = (req, res) => {
+  try {
+    res.status(200).json({ message: 'Backend connection successful', timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ message: 'Backend connection error' });
+  }
+};

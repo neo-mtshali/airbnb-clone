@@ -273,7 +273,9 @@
 .price {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 2px;
+  font-size: 16px;
+  color: #222;
 }
 
 .amount {
@@ -284,10 +286,81 @@
 .per-night {
   font-weight: 400;
   color: #717171;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-.per-night {
+/* Pagination Controls Styling */
+.pagination-controls {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #dddddd;
+  background: white;
+  color: #222222;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-number:hover {
+  border-color: #222222;
+}
+
+.page-number.active {
+  background-color: #222222;
+  color: white;
+  border-color: #222222;
+}
+
+.page-ellipsis {
   font-size: 14px;
   color: #717171;
+}
+
+.page-navigation {
+  display: flex;
+  gap: 16px;
+}
+
+.prev-page,
+.next-page {
+  padding: 8px 16px;
+  border: 1px solid #dddddd;
+  background: white;
+  border-radius: 30px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prev-page:hover,
+.next-page:hover {
+  border-color: #222222;
+}
+
+.prev-page:disabled,
+.next-page:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #dddddd;
 }

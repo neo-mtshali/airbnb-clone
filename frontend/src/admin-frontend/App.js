@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
 
 // Pages
 import Login from './pages/Login/Login';
@@ -18,6 +20,11 @@ import Layout from './components/Layout/Layout';
 
 // Utils
 import { isAuthenticated } from './utils/auth';
+
+// Create Emotion cache
+const emotionCache = createCache({
+  key: 'mui-style',
+});
 
 const theme = createTheme({
   palette: {
@@ -49,43 +56,45 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ToastContainer position="top-right" autoClose={3000} />
-      <Routes>
-        <Route path="login" element={<Login />} />
-        <Route path="/" element={<Navigate to="view-listings" replace />} />
-        <Route path="reservations" element={
-          <ProtectedRoute>
-            <Layout>
-              <Reservations />
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="create-listing" element={
-          <ProtectedRoute>
-            <Layout>
-              <CreateListing />
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="view-listings" element={
-          <ProtectedRoute>
-            <Layout>
-              <ViewListings />
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="update-listing/:id" element={
-          <ProtectedRoute>
-            <Layout>
-              <UpdateListing />
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<Navigate to="." replace />} />
-      </Routes>
-    </ThemeProvider>
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ToastContainer position="top-right" autoClose={3000} />
+        <Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="/" element={<Navigate to="view-listings" replace />} />
+          <Route path="reservations" element={
+            <ProtectedRoute>
+              <Layout>
+                <Reservations />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="create-listing" element={
+            <ProtectedRoute>
+              <Layout>
+                <CreateListing />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="view-listings" element={
+            <ProtectedRoute>
+              <Layout>
+                <ViewListings />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="update-listing/:id" element={
+            <ProtectedRoute>
+              <Layout>
+                <UpdateListing />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="." replace />} />
+        </Routes>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
 
